@@ -2,7 +2,7 @@
   "name": "Ezekiel Bible School",
   "short_name": "Ezekiel",
   "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }],
-  "theme_color": "#1e3a2f",
+  "theme_color": "#f6f3ec",
   "background_color": "#f6f3ec",
   "display": "browser"
 }

@@ -12,13 +12,21 @@ python3 -m http.server 8000
 
 ## Structure
 
-| File | Purpose |
+| Path | Page |
 | --- | --- |
-| `index.html` | Home page |
-| `styles.css` | All styles, mobile first |
-| `main.js` | Mobile menu, programme filter, enquiry form |
-| `404.html` | Not-found page (served automatically by Vercel) |
-| `vercel.json` | Clean URLs and security headers |
+| `index.html` | Home |
+| `programmes.html` | Programmes, entry requirements, online study |
+| `about.html` | History, teaching approach, faculty |
+| `admissions.html` | How to apply, key dates, fees, FAQ |
+| `visit.html` | Events, location, office hours |
+| `enquire.html` | Prospectus request form |
+| `404.html` | Not found |
+
+`styles.css` holds all styles (mobile first) and `main.js` handles the mobile menu,
+programme filter and enquiry form. `vercel.json` turns on clean URLs, so
+`/programmes` serves `programmes.html`.
+
+The header and footer are repeated in each page. If you change one, change them all.
 
 ## Deployment
 

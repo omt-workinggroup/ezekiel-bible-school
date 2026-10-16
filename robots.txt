@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://ezekiel-bible-school.vercel.app/sitemap.xml

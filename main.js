@@ -1,72 +1,99 @@
-const menuBtn = document.querySelector(".menu-btn");
-const nav = document.getElementById("nav");
+const root = document.documentElement;
 
-function setMenu(open) {
-  menuBtn.setAttribute("aria-expanded", String(open));
-  menuBtn.textContent = open ? "Close" : "Menu";
-  nav.classList.toggle("is-open", open);
+// Mobile menu
+const burger = document.querySelector(".burger");
+const menu = document.getElementById("menu");
+const header = document.querySelector(".header");
+const label = burger.querySelector(".burger__label");
+const desktop = window.matchMedia("(min-width: 64em)");
+const outside = document.querySelectorAll("main, .footer, .notice");
+
+function openMenu() {
+  menu.style.setProperty("--menu-top", `${header.getBoundingClientRect().bottom}px`);
+  root.classList.add("menu-open");
+  burger.setAttribute("aria-expanded", "true");
+  label.textContent = "Close";
+  outside.forEach((el) => (el.inert = true));
+  menu.querySelector("a").focus({ preventScroll: true });
 }
 
-menuBtn.addEventListener("click", () => {
-  setMenu(menuBtn.getAttribute("aria-expanded") !== "true");
+function closeMenu({ restoreFocus = true } = {}) {
+  if (!root.classList.contains("menu-open")) return;
+  root.classList.remove("menu-open");
+  burger.setAttribute("aria-expanded", "false");
+  label.textContent = "Menu";
+  outside.forEach((el) => (el.inert = false));
+  if (restoreFocus) burger.focus({ preventScroll: true });
+}
+
+burger.addEventListener("click", () => {
+  root.classList.contains("menu-open") ? closeMenu() : openMenu();
 });
 
-nav.addEventListener("click", (e) => {
-  if (e.target.closest("a")) setMenu(false);
+menu.addEventListener("click", (e) => {
+  if (e.target.closest("a")) closeMenu({ restoreFocus: false });
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && nav.classList.contains("is-open")) {
-    setMenu(false);
-    menuBtn.focus();
-  }
+  if (e.key === "Escape") closeMenu();
+});
+
+desktop.addEventListener("change", (e) => {
+  if (e.matches) closeMenu({ restoreFocus: false });
 });
 
 // Programme filter
-const filterBtns = document.querySelectorAll(".filter__btn");
-const rows = document.querySelectorAll(".programmes tbody tr");
+const filter = document.querySelector(".filter");
 
-filterBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const mode = btn.dataset.mode;
-    filterBtns.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+if (filter) {
+  const buttons = filter.querySelectorAll("button");
+  const rows = document.querySelectorAll(".programmes tbody tr");
+
+  filter.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    const { mode } = btn.dataset;
+    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
     rows.forEach((row) => {
-      row.hidden = mode !== "all" && !row.dataset.modes.split(" ").includes(mode);
+      row.hidden = mode !== "all" && !row.dataset.modes.includes(mode);
     });
   });
-});
+}
 
 // Enquiry form
-// No backend yet. Swap the handler for a fetch() to Formspree or an API route.
+// TODO: post to Formspree or /api/enquiry once the admissions inbox is set up.
 const form = document.getElementById("enquiry-form");
-const status = form.querySelector(".form__status");
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
+if (form) {
+  const status = form.querySelector(".form__status");
+  const programme = new URLSearchParams(location.search).get("programme");
+  if (programme) form.elements.programme.value = programme;
 
-  const invalid = [...form.querySelectorAll("[required]")].filter((field) => {
-    const bad = !field.value.trim() || !field.checkValidity();
-    field.setAttribute("aria-invalid", String(bad));
-    return bad;
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const invalid = [...form.querySelectorAll("[required]")].filter((field) => {
+      const bad = !field.value.trim() || !field.checkValidity();
+      field.setAttribute("aria-invalid", String(bad));
+      return bad;
+    });
+
+    if (invalid.length) {
+      status.className = "form__status is-error";
+      status.textContent = "Please complete the highlighted fields.";
+      invalid[0].focus();
+      return;
+    }
+
+    const name = form.elements.name.value.trim().split(/\s+/)[0];
+    status.className = "form__status is-sent";
+    status.textContent = `Thank you, ${name}. We'll reply within two working days.`;
+    form.reset();
   });
 
-  if (invalid.length) {
-    status.className = "form__status is-error";
-    status.textContent = "Please check the highlighted fields.";
-    invalid[0].focus();
-    return;
-  }
+  form.addEventListener("input", (e) => e.target.removeAttribute("aria-invalid"));
+}
 
-  const firstName = form.elements.name.value.trim().split(/\s+/)[0];
-  status.className = "form__status is-sent";
-  status.textContent = `Thanks, ${firstName}. We'll be in touch within two working days.`;
-  form.reset();
+document.querySelectorAll("[data-year]").forEach((el) => {
+  el.textContent = new Date().getFullYear();
 });
-
-form.addEventListener("input", (e) => {
-  if (e.target.getAttribute("aria-invalid") === "true") {
-    e.target.removeAttribute("aria-invalid");
-  }
-});
-
-document.querySelector("[data-year]").textContent = new Date().getFullYear();

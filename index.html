@@ -4,35 +4,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Ezekiel Bible School</title>
-  <meta name="description" content="Certificate, diploma and degree programmes in Bible, theology and ministry. Study on campus or online. Applications for the January 2027 intake are open.">
-  <meta name="theme-color" content="#1e3a2f">
+  <meta name="description" content="Certificate, diploma and degree programmes in Bible, theology and ministry, on campus or online.">
+  <link rel="canonical" href="https://ezekiel-bible-school.vercel.app/">
+  <meta name="theme-color" content="#f6f3ec">
   <meta property="og:title" content="Ezekiel Bible School">
-  <meta property="og:description" content="Study Scripture closely. Serve the church well. Applications for January 2027 are open.">
+  <meta property="og:description" content="Certificate, diploma and degree programmes in Bible, theology and ministry, on campus or online.">
   <meta property="og:type" content="website">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Public+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Public+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="/styles.css">
+  <script src="/main.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
 
   <div class="notice">
     <div class="wrap notice__inner">
-      <p>Applications for the January 2027 intake close on <strong>30 November</strong>.</p>
-      <ul class="notice__links">
-        <li><a href="#">Student portal</a></li>
-        <li><a href="#">Library</a></li>
-        <li><a href="#">Give</a></li>
-      </ul>
+      <p><span class="notice__long">January 2027 applications close</span><span class="notice__short">Applications close</span> <strong>30 November</strong></p>
+      <a href="/admissions">Key dates</a>
     </div>
   </div>
 
   <header class="header">
     <div class="wrap header__inner">
-      <a class="logo" href="/" aria-label="Ezekiel Bible School, home">
+      <a class="logo" href="/">
         <svg class="logo__seal" viewBox="0 0 40 40" aria-hidden="true">
           <circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
           <path d="M20 8v24M13.5 15h13" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
@@ -40,408 +38,191 @@
         <span class="logo__name">Ezekiel <span>Bible School</span></span>
       </a>
 
-      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
-
-      <nav class="nav" id="nav" aria-label="Primary">
-        <a href="#study">Study</a>
-        <a href="#life">Student life</a>
-        <a href="#faculty">Faculty</a>
-        <a href="#admissions">Admissions</a>
-        <a href="#visit">Visit</a>
-        <a class="nav__apply" href="#enquire">Apply</a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/about">About</a>
+        <a href="/programmes">Programmes</a>
+        <a href="/admissions">Admissions</a>
+        <a href="/visit">Visit</a>
+        <a class="button button--sm" href="/enquire">Enquire</a>
       </nav>
+
+      <button class="burger" type="button" aria-expanded="false" aria-controls="menu">
+        <span class="burger__label">Menu</span>
+        <span class="burger__icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
     </div>
   </header>
 
+  <div class="menu" id="menu">
+    <div class="menu__body wrap">
+      <nav aria-label="Site">
+        <ul class="menu__links">
+          <li style="--i: 0"><a href="/" aria-current="page">Home</a></li>
+          <li style="--i: 1"><a href="/about">About</a></li>
+          <li style="--i: 2"><a href="/programmes">Programmes</a></li>
+          <li style="--i: 3"><a href="/admissions">Admissions</a></li>
+          <li style="--i: 4"><a href="/visit">Visit</a></li>
+          <li style="--i: 5"><a href="/enquire">Enquire</a></li>
+        </ul>
+      </nav>
+      <div class="menu__foot">
+        <p class="menu__intake">January 2027 intake<br><span>Applications close 30 November</span></p>
+        <p class="menu__contact">
+          <a href="tel:+10000000000">+1 (000) 000-0000</a>
+          <a href="mailto:admissions@example.com">admissions@example.com</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
   <main id="main">
-    <section class="intro">
-      <div class="wrap intro__grid">
-        <div class="intro__text">
-          <h1>Study Scripture closely. Serve the church well.</h1>
-          <p class="lede">
-            Ezekiel Bible School has trained pastors, missionaries and lay leaders since 2001.
-            Our students read the Bible in its own languages, learn under teachers who still
-            pastor, and spend every term serving in a local congregation.
-          </p>
-          <p class="intro__actions">
-            <a class="button" href="#enquire">Request a prospectus</a>
-            <a class="link-arrow" href="#study">See all programmes</a>
-          </p>
+    <section class="hero">
+      <div class="wrap hero__grid">
+        <div>
+          <h1>Study Scripture closely.<br>Serve the church well.</h1>
+          <p class="lede">Theological training for pastors, missionaries and church leaders since 2001. On campus in Hope City or online from anywhere.</p>
+          <div class="hero__actions">
+            <a class="button" href="/enquire">Request a prospectus</a>
+            <a class="link-arrow" href="/programmes">Our programmes</a>
+          </div>
         </div>
 
-        <aside class="dates" aria-labelledby="dates-title">
-          <h2 id="dates-title" class="dates__title">January 2027 intake</h2>
-          <dl class="dates__list">
+        <aside class="intake" aria-labelledby="intake-title">
+          <h2 id="intake-title">January 2027 intake</h2>
+          <dl>
             <div><dt>Open day</dt><dd>Sat 7 Nov</dd></div>
             <div><dt>Applications close</dt><dd>Mon 30 Nov</dd></div>
-            <div><dt>Interviews</dt><dd>1 to 11 Dec</dd></div>
-            <div><dt>Orientation week</dt><dd>From Mon 11 Jan</dd></div>
+            <div><dt>Term begins</dt><dd>Mon 11 Jan</dd></div>
           </dl>
-          <a class="dates__more" href="#visit">Book a place at open day</a>
         </aside>
       </div>
     </section>
 
-    <section class="facts" aria-label="The school in numbers">
-      <div class="wrap">
-        <ul class="facts__list">
-          <li><strong>3,200</strong> graduates in ministry</li>
-          <li><strong>41</strong> countries represented this year</li>
-          <li><strong>12</strong> students per tutor, on average</li>
-          <li><strong>68%</strong> of students receive a bursary</li>
-        </ul>
-      </div>
+    <section class="facts" aria-label="At a glance">
+      <ul class="wrap facts__list">
+        <li><strong>25</strong> years of teaching</li>
+        <li><strong>3,200</strong> graduates in ministry</li>
+        <li><strong>41</strong> countries this year</li>
+        <li><strong>1 : 12</strong> tutor to student</li>
+      </ul>
     </section>
 
-    <section class="section" id="study">
+    <section class="section">
       <div class="wrap">
-        <div class="section__head">
+        <div class="section-head">
           <h2>Programmes</h2>
-          <p>
-            Every programme can be started in January or September. Fees are per year and
-            include books for on-campus students.
-          </p>
+          <a class="link-arrow" href="/programmes">All six programmes</a>
         </div>
-
-        <div class="filter" role="group" aria-label="Show programmes">
-          <button type="button" class="filter__btn" aria-pressed="true" data-mode="all">All</button>
-          <button type="button" class="filter__btn" aria-pressed="false" data-mode="campus">On campus</button>
-          <button type="button" class="filter__btn" aria-pressed="false" data-mode="online">Online</button>
-        </div>
-
         <table class="programmes">
           <thead>
             <tr>
               <th scope="col">Programme</th>
               <th scope="col">Length</th>
-              <th scope="col">Study mode</th>
-              <th scope="col">Fees from</th>
+              <th scope="col">Mode</th>
+              <th scope="col">Per year</th>
             </tr>
           </thead>
           <tbody>
             <tr data-modes="campus online">
-              <th scope="row">
-                <a href="#enquire">Certificate in Biblical Studies</a>
-                <span>Old and New Testament survey, Christian doctrine, prayer and spiritual disciplines.</span>
-              </th>
-              <td data-label="Length">1 year</td>
-              <td data-label="Mode">Campus, online</td>
-              <td data-label="Fees">$1,200</td>
+              <th scope="row"><a href="/enquire?programme=Certificate+in+Biblical+Studies">Certificate in Biblical Studies</a><span>Old and New Testament survey, Christian doctrine, prayer and the spiritual disciplines.</span></th>
+              <td>1 year</td>
+              <td>Campus, online</td>
+              <td>$1,200</td>
             </tr>
             <tr data-modes="campus">
-              <th scope="row">
-                <a href="#enquire">Diploma in Pastoral Ministry</a>
-                <span>Preaching, pastoral care and church leadership, with a supervised placement.</span>
-              </th>
-              <td data-label="Length">2 years</td>
-              <td data-label="Mode">Campus</td>
-              <td data-label="Fees">$1,850</td>
+              <th scope="row"><a href="/enquire?programme=Diploma+in+Pastoral+Ministry">Diploma in Pastoral Ministry</a><span>Preaching, pastoral care and church leadership, with a supervised placement.</span></th>
+              <td>2 years</td>
+              <td>Campus</td>
+              <td>$1,850</td>
             </tr>
             <tr data-modes="campus online">
-              <th scope="row">
-                <a href="#enquire">Bachelor of Theology</a>
-                <span>Greek and Hebrew, systematic theology, church history and hermeneutics.</span>
-              </th>
-              <td data-label="Length">3 years full time</td>
-              <td data-label="Mode">Campus, online</td>
-              <td data-label="Fees">$2,400</td>
-            </tr>
-            <tr data-modes="online">
-              <th scope="row">
-                <a href="#enquire">Diploma in Missions</a>
-                <span>Cross-cultural ministry and church planting. Includes a three-week field trip.</span>
-              </th>
-              <td data-label="Length">18 months</td>
-              <td data-label="Mode">Online</td>
-              <td data-label="Fees">$1,500</td>
-            </tr>
-            <tr data-modes="campus online">
-              <th scope="row">
-                <a href="#enquire">Certificate in Biblical Counselling</a>
-                <span>Care for individuals and families, grounded in Scripture.</span>
-              </th>
-              <td data-label="Length">6 months</td>
-              <td data-label="Mode">Campus, online</td>
-              <td data-label="Fees">$650</td>
-            </tr>
-            <tr data-modes="online">
-              <th scope="row">
-                <a href="#enquire">Evening School of Discipleship</a>
-                <span>A short course for church members. Tuesday evenings, no entry requirements.</span>
-              </th>
-              <td data-label="Length">12 weeks</td>
-              <td data-label="Mode">Online</td>
-              <td data-label="Fees">$120</td>
+              <th scope="row"><a href="/enquire?programme=Bachelor+of+Theology">Bachelor of Theology</a><span>Greek and Hebrew, systematic theology, church history and hermeneutics.</span></th>
+              <td>3 years</td>
+              <td>Campus, online</td>
+              <td>$2,400</td>
             </tr>
           </tbody>
         </table>
-        <p class="note">Online students pay 20% less and buy their own textbooks.</p>
       </div>
     </section>
 
-    <section class="section section--paper" id="life">
-      <div class="wrap split">
-        <div class="split__main">
-          <h2>How we teach</h2>
-          <p>
-            Classes are small and most of them meet around a table rather than in a lecture
-            hall. You will be expected to read a lot, write regularly and be ready to explain
-            a passage to people who did not come to hear a lecture.
-          </p>
-          <div class="pillars">
-            <div>
-              <h3>Scripture</h3>
-              <p>Every student reads the whole Bible in their first year and takes at least one term of Greek.</p>
-            </div>
-            <div>
-              <h3>Formation</h3>
-              <p>Groups of eight meet weekly with a tutor to pray, talk honestly and hold each other to account.</p>
-            </div>
-            <div>
-              <h3>Practice</h3>
-              <p>From the second term you serve with a partner church, preaching, teaching or visiting.</p>
-            </div>
-          </div>
+    <section class="section section--tint">
+      <div class="wrap feature">
+        <div class="feature__text">
+          <h2>Small classes. Serious reading. Real ministry.</h2>
+          <p>Most classes meet around a table, not in a lecture hall. From your second term you serve every week with a partner church, so what you learn on Monday is tested by Sunday.</p>
+          <a class="link-arrow" href="/about">How we teach</a>
         </div>
-
-        <figure class="timetable">
-          <figcaption>A Tuesday on campus</figcaption>
-          <ol>
-            <li><time>06:45</time> Morning prayer</li>
-            <li><time>08:30</time> Old Testament II</li>
-            <li><time>10:15</time> Greek, reading class</li>
-            <li><time>12:30</time> Lunch together</li>
-            <li><time>14:00</time> Library and study</li>
-            <li><time>16:30</time> Formation group</li>
-            <li><time>19:00</time> Chapel</li>
-          </ol>
-        </figure>
+        <blockquote class="feature__quote">
+          <p>I arrived wanting to preach. I left knowing how to listen to the text first, and to the people in front of me second.</p>
+          <footer>Joseph Adebayo <span>Diploma in Pastoral Ministry, 2022</span></footer>
+        </blockquote>
       </div>
     </section>
 
-    <section class="section" id="faculty">
+    <section class="section">
       <div class="wrap">
-        <div class="section__head">
-          <h2>Faculty</h2>
-          <p>All of our full-time teachers serve in local churches alongside their teaching.</p>
+        <div class="section-head">
+          <h2>Coming up</h2>
+          <a class="link-arrow" href="/visit">All events</a>
         </div>
-        <ul class="people">
-          <li class="person">
-            <span class="person__initials" aria-hidden="true">DA</span>
-            <div>
-              <h3>Rev. Dr Daniel Adeyemi</h3>
-              <p class="person__role">Principal, Old Testament</p>
-              <p>Pastored in Ibadan for 18 years before joining the school. Teaches Hebrew and the Prophets.</p>
-            </div>
+        <ul class="events">
+          <li>
+            <time datetime="2026-11-07"><span>Nov</span> 07</time>
+            <div><h3>Open day</h3><p>Sit in on a class, have lunch with students and meet the faculty.</p></div>
           </li>
-          <li class="person">
-            <span class="person__initials" aria-hidden="true">GM</span>
-            <div>
-              <h3>Dr Grace Mensah</h3>
-              <p class="person__role">Academic Dean, New Testament</p>
-              <p>Wrote her doctorate on Galatians. Runs the Greek reading group on Thursday nights.</p>
-            </div>
-          </li>
-          <li class="person">
-            <span class="person__initials" aria-hidden="true">SO</span>
-            <div>
-              <h3>Pastor Samuel Okafor</h3>
-              <p class="person__role">Pastoral Theology</p>
-              <p>Planted three churches and now oversees student placements.</p>
-            </div>
-          </li>
-          <li class="person">
-            <span class="person__initials" aria-hidden="true">RT</span>
-            <div>
-              <h3>Dr Ruth Thompson</h3>
-              <p class="person__role">Missions</p>
-              <p>Fifteen years in East Africa with a Bible translation team.</p>
-            </div>
+          <li>
+            <time datetime="2026-11-21"><span>Nov</span> 21</time>
+            <div><h3>Online information evening</h3><p>For anyone considering online study. On Zoom, 18:00.</p></div>
           </li>
         </ul>
       </div>
     </section>
 
-    <section class="section section--dark">
-      <div class="wrap quotes">
-        <blockquote class="quote">
-          <p>I arrived wanting to preach. I left knowing how to listen to the text first, and to the people in front of me second.</p>
-          <footer>Joseph Adebayo, Diploma in Pastoral Ministry, 2022</footer>
-        </blockquote>
-        <blockquote class="quote">
-          <p>I studied online around a full-time job. My tutor replied to every email, usually the same day.</p>
-          <footer>Esther Nwosu, Bachelor of Theology, 2024</footer>
-        </blockquote>
-      </div>
-    </section>
-
-    <section class="section" id="admissions">
-      <div class="wrap split split--even">
-        <div>
-          <h2>Admissions</h2>
-          <p>
-            We look for people who are already serving in their church and want to be better
-            equipped for it. You don't need a theology background. You do need a recommendation
-            from your pastor.
-          </p>
-          <ol class="steps">
-            <li>
-              <h3>Send an enquiry</h3>
-              <p>We'll post or email a prospectus and put you in touch with an admissions tutor.</p>
-            </li>
-            <li>
-              <h3>Apply</h3>
-              <p>A short form, a one-page testimony and your pastor's letter.</p>
-            </li>
-            <li>
-              <h3>Interview</h3>
-              <p>Thirty minutes, in person or on a video call.</p>
-            </li>
-            <li>
-              <h3>Accept your offer</h3>
-              <p>Bursary decisions are sent with offers, so you know the full cost before you commit.</p>
-            </li>
-          </ol>
-        </div>
-
-        <div class="faq">
-          <h2 class="faq__title">Questions we get asked</h2>
-          <details>
-            <summary>Can I study online from another country?</summary>
-            <p>Yes. Lectures are recorded and seminars run at two times each week so that most time zones are covered.</p>
-          </details>
-          <details>
-            <summary>How do bursaries work?</summary>
-            <p>Tick the bursary box on your application. We look at household income and your church's support, and most awards cover between 25% and 75% of fees.</p>
-          </details>
-          <details>
-            <summary>Is the school tied to a denomination?</summary>
-            <p>No. Students come from Anglican, Baptist, Pentecostal, Methodist and independent churches. Everyone affirms our statement of faith.</p>
-          </details>
-          <details>
-            <summary>Is there accommodation?</summary>
-            <p>Shared rooms on campus with meals included. We have six flats for married students, allocated in order of acceptance.</p>
-          </details>
-          <details>
-            <summary>Can I transfer credit from another college?</summary>
-            <p>Usually, for up to a third of a programme. Send your transcript with your application and the Dean will review it.</p>
-          </details>
+    <section class="cta">
+      <div class="wrap cta__inner">
+        <h2>Applications for January close on 30 November.</h2>
+        <div class="cta__actions">
+          <a class="button button--light" href="/enquire">Request a prospectus</a>
+          <a class="link-arrow link-arrow--light" href="/visit">Come to open day</a>
         </div>
       </div>
     </section>
 
-    <section class="section section--paper" id="visit">
-      <div class="wrap split">
-        <div class="split__main">
-          <h2>Coming up</h2>
-          <ul class="events">
-            <li>
-              <time datetime="2026-11-07">7 Nov</time>
-              <div>
-                <h3>Open day</h3>
-                <p>Sit in on a class, have lunch with students, meet the faculty. 10:00 to 15:00.</p>
-              </div>
-            </li>
-            <li>
-              <time datetime="2026-11-21">21 Nov</time>
-              <div>
-                <h3>Online information evening</h3>
-                <p>For anyone considering online study. On Zoom at 18:00, about an hour.</p>
-              </div>
-            </li>
-            <li>
-              <time datetime="2026-12-05">5 Dec</time>
-              <div>
-                <h3>Graduation service</h3>
-                <p>The class of 2026 is commissioned. Families and churches welcome.</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="address">
-          <h3>Find us</h3>
-          <p>12 Covenant Avenue<br>Hope City</p>
-          <p>Office hours are 08:00 to 16:30, Monday to Friday. Parking is free on campus.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section enquire" id="enquire">
-      <div class="wrap split split--even">
-        <div>
-          <h2>Ask for a prospectus</h2>
-          <p>
-            Tell us a little about yourself and an admissions tutor will be in touch within two
-            working days. Prefer to talk? Call <a href="tel:+10000000000">+1 (000) 000-0000</a>
-            or email <a href="mailto:admissions@example.com">admissions@example.com</a>.
-          </p>
-        </div>
-
-        <form class="form" id="enquiry-form" novalidate>
-          <div class="form__row">
-            <label for="f-name">Name</label>
-            <input id="f-name" name="name" autocomplete="name" required>
-          </div>
-          <div class="form__row">
-            <label for="f-email">Email</label>
-            <input id="f-email" name="email" type="email" autocomplete="email" required>
-          </div>
-          <div class="form__row">
-            <label for="f-programme">Programme</label>
-            <select id="f-programme" name="programme" required>
-              <option value="">Select one</option>
-              <option>Certificate in Biblical Studies</option>
-              <option>Diploma in Pastoral Ministry</option>
-              <option>Bachelor of Theology</option>
-              <option>Diploma in Missions</option>
-              <option>Certificate in Biblical Counselling</option>
-              <option>Evening School of Discipleship</option>
-              <option>Not sure yet</option>
-            </select>
-          </div>
-          <fieldset class="form__row form__choice">
-            <legend>How would you study?</legend>
-            <label><input type="radio" name="mode" value="campus" checked> On campus</label>
-            <label><input type="radio" name="mode" value="online"> Online</label>
-          </fieldset>
-          <div class="form__row">
-            <label for="f-message">Anything else? <span>Optional</span></label>
-            <textarea id="f-message" name="message" rows="3"></textarea>
-          </div>
-          <button class="button" type="submit">Send enquiry</button>
-          <p class="form__status" role="status"></p>
-        </form>
-      </div>
-    </section>
   </main>
 
   <footer class="footer">
     <div class="wrap footer__grid">
-      <div>
+      <div class="footer__about">
         <p class="footer__name">Ezekiel Bible School</p>
-        <p>12 Covenant Avenue, Hope City<br><a href="mailto:office@example.com">office@example.com</a></p>
+        <p>12 Covenant Avenue<br>Hope City</p>
+        <p><a href="tel:+10000000000">+1 (000) 000-0000</a><br><a href="mailto:office@example.com">office@example.com</a></p>
       </div>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="#study">Programmes</a></li>
-          <li><a href="#admissions">Admissions</a></li>
-          <li><a href="#faculty">Faculty</a></li>
-          <li><a href="#visit">Visit</a></li>
-        </ul>
-        <ul>
-          <li><a href="#">Statement of faith</a></li>
-          <li><a href="#">Student portal</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Privacy</a></li>
-        </ul>
+      <nav class="footer__nav" aria-label="Footer">
+        <div>
+          <h2>Study</h2>
+          <ul>
+            <li><a href="/programmes">Programmes</a></li>
+            <li><a href="/admissions">Admissions</a></li>
+            <li><a href="/admissions#fees">Fees and bursaries</a></li>
+            <li><a href="/enquire">Request a prospectus</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>School</h2>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/about#faculty">Faculty</a></li>
+            <li><a href="/visit">Events</a></li>
+            <li><a href="/visit#find-us">Find us</a></li>
+          </ul>
+        </div>
       </nav>
     </div>
     <div class="wrap footer__base">
       <p>&copy; <span data-year>2026</span> Ezekiel Bible School</p>
-      <p class="footer__verse">“I will give you a new heart.” Ezekiel 36:26</p>
+      <p class="footer__verse">“I will give you a new heart.” <span>Ezekiel 36:26</span></p>
     </div>
   </footer>
-
-  <script src="/main.js" defer></script>
 </body>
 </html>
