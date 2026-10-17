@@ -6,6 +6,9 @@ import json, pathlib, sys
 from datetime import date
 from urllib.parse import quote
 
+sys.path.insert(0, str(pathlib.Path(__file__).parent))
+import curriculum as C  # noqa: E402
+
 OUT = pathlib.Path(sys.argv[1])
 
 SITE = "https://ezekiel-bible-school.vercel.app"
@@ -28,7 +31,7 @@ MAP_QUERY = quote(ADDRESS_LINE)
 MAP_EMBED = f"https://maps.google.com/maps?q={MAP_QUERY}&z=15&output=embed"
 MAP_LINK = f"https://www.google.com/maps/search/?api=1&query={MAP_QUERY}"
 
-NAV = [("/about", "About"), ("/programmes", "Programmes"), ("/admissions", "Admissions"), ("/hostel", "Hostel"), ("/visit", "Visit")]
+NAV = [("/about", "About"), ("/programmes", "Programmes"), ("/curriculum", "Curriculum"), ("/admissions", "Admissions"), ("/hostel", "Hostel"), ("/visit", "Visit")]
 
 
 def ld(*objects):
@@ -58,8 +61,9 @@ ORG = {
     "url": f"{SITE}/",
     "logo": f"{SITE}/icon-512.png",
     "image": f"{SITE}/og-image.jpg",
-    "description": "Ezekiel Bible Institute is an evangelical, interdenominational Bible school in East Legon, Accra, Ghana. It offers certificate, diploma and degree programmes in Bible, theology and ministry, on campus and online, with hostel accommodation. Ghanaian and international students are welcome.",
+    "description": "Ezekiel Bible Institute is an evangelical, interdenominational Bible school in East Legon, Accra, Ghana. It offers six levels of study in Bible, theology and ministry, from a Certificate in Christian Foundations to a PhD, with hostel accommodation. Ghanaian and international students are welcome.",
     "slogan": "Study Scripture closely. Serve the church well.",
+    "disambiguatingDescription": C.AIM,
     "foundingDate": "2001",
     "address": postal_address(),
     "hasMap": MAP_LINK,
@@ -307,37 +311,54 @@ CTA = f"""
     </section>
 """
 
-PROGRAMMES = [
-    ("Certificate in Biblical Studies", "Old and New Testament survey, Christian doctrine, prayer and the spiritual disciplines.", "1 year", "Campus, online", "$1,200", "campus online"),
-    ("Diploma in Pastoral Ministry", "Preaching, pastoral care and church leadership, with a supervised placement.", "2 years", "Campus", "$1,850", "campus"),
-    ("Bachelor of Theology", "Greek and Hebrew, systematic theology, church history and hermeneutics.", "3 years", "Campus, online", "$2,400", "campus online"),
-    ("Diploma in Missions", "Cross-cultural ministry and church planting. Includes a three-week field trip.", "18 months", "Online", "$1,500", "online"),
-    ("Certificate in Biblical Counselling", "Care for individuals and families, grounded in Scripture.", "6 months", "Campus, online", "$650", "campus online"),
-    ("Evening School of Discipleship", "A short course for church members. Tuesday evenings, no entry requirements.", "12 weeks", "Online", "$120", "online"),
-]
+STAGE_LABEL = {"undergraduate": "Undergraduate", "postgraduate": "Postgraduate"}
 
-def prog_rows(items):
-    return "\n".join(f"""            <tr data-modes="{m}">
-              <th scope="row"><a href="/enquire?programme={n.replace(' ', '+')}">{n}</a><span>{d}</span></th>
-              <td>{l}</td>
-              <td>{mode}</td>
-              <td>{fee}</td>
-            </tr>""" for n, d, l, mode, fee, m in items)
 
-def prog_table(items, caption_hidden=True):
+def semesters_text(lv):
+    return f'{lv["semesters"]} semesters' if lv["semesters"] else "Research-led"
+
+
+def prog_rows(levels):
+    return "\n".join(f"""            <tr data-group="{lv['stage']}">
+              <th scope="row"><a href="/curriculum#{lv['slug']}"><span class="programmes__level">Level {lv['n']}</span>{lv['name']}</a><span>{lv['purpose']}</span></th>
+              <td>{lv['length']}</td>
+              <td>{semesters_text(lv)}</td>
+              <td>{STAGE_LABEL[lv['stage']]}</td>
+            </tr>""" for lv in levels)
+
+
+def prog_table(levels):
     return f"""        <table class="programmes">
           <thead>
             <tr>
               <th scope="col">Programme</th>
               <th scope="col">Length</th>
-              <th scope="col">Mode</th>
-              <th scope="col">Per year</th>
+              <th scope="col">Structure</th>
+              <th scope="col">Stage</th>
             </tr>
           </thead>
           <tbody>
-{prog_rows(items)}
+{prog_rows(levels)}
           </tbody>
         </table>"""
+
+
+def ladder():
+    steps = "\n".join(f"""          <li>
+            <a href="/curriculum#{lv['slug']}">
+              <span class="ladder__n">0{lv['n']}</span>
+              <span class="ladder__short">{lv['short']}</span>
+              <span class="ladder__len">{lv['length']}</span>
+            </a>
+          </li>""" for lv in C.LEVELS)
+    return f"""        <ol class="ladder">
+{steps}
+        </ol>"""
+
+
+def pathway():
+    return "\n".join(f'          <li>{step}</li>' for step in C.PATHWAY)
+
 
 # Hero background photos, in order. Files live in img/. Leave empty for the
 # plain navy background.
@@ -369,11 +390,11 @@ def countries_band():
 
 VOICES = [
     ("I arrived wanting to preach. I left knowing how to listen to the text first, and to the people in front of me second.",
-     "Joseph Adebayo", "Lagos, Nigeria", "Diploma in Pastoral Ministry, 2022"),
+     "Joseph Adebayo", "Lagos, Nigeria", "Diploma in Christian Ministry & Biblical Studies, 2022"),
     ("I studied online around a full-time job in Kumasi. My tutor replied to every email, usually the same day, and the seminars felt like a real classroom.",
      "Ama Owusu", "Kumasi, Ghana", "Bachelor of Theology, 2024"),
     ("I had never left Liberia. Someone was waiting for me at Kotoka, my room was ready, and by the second week the hostel felt like family.",
-     "Samuel Kollie", "Monrovia, Liberia", "Diploma in Missions, 2025"),
+     "Samuel Kollie", "Monrovia, Liberia", "Certificate in Christian Foundations, 2025"),
 ]
 
 
@@ -408,7 +429,9 @@ HOME_FAQ = [
     ("Is there hostel accommodation?",
      "Yes. The institute runs a student hostel on site in East Legon, with furnished shared rooms, Wi-Fi, study space and security. Rooms are open to Ghanaian and international students."),
     ("What programmes are offered?",
-     "Certificates in Biblical Studies and Biblical Counselling, diplomas in Pastoral Ministry and Missions, a three-year Bachelor of Theology and a twelve-week Evening School of Discipleship."),
+     "Six levels of study: a Certificate in Christian Foundations, a Diploma in Christian Ministry & Biblical Studies, a Bachelor of Theology / Christian Ministry, a Master of Theology / Christian Ministry, a Doctor of Ministry (DMin) and a PhD in Biblical & Theological Studies."),
+    ("What is the teaching approach?",
+     "Ezekiel Bible Institute aims for formation, not just information. Every programme develops four dimensions: knowledge, character, competence and calling, and includes supervised ministry practice."),
 ]
 
 EVENTS = [
@@ -450,23 +473,29 @@ def courses_ld():
         "itemListElement": [
             {
                 "@type": "ListItem",
-                "position": i + 1,
+                "position": lv["n"],
                 "item": {
                     "@type": "Course",
-                    "name": n,
-                    "description": d,
+                    "@id": f"{SITE}/curriculum#{lv['slug']}",
+                    "url": f"{SITE}/curriculum#{lv['slug']}",
+                    "name": lv["name"],
+                    "description": lv["purpose"],
+                    "educationalLevel": STAGE_LABEL[lv["stage"]],
+                    "timeRequired": lv["length"],
                     "provider": {"@id": f"{SITE}/#org"},
                     "inLanguage": "en",
-                    "timeRequired": l,
-                    "offers": {"@type": "Offer", "category": "Paid", "price": fee.strip("$").replace(",", ""), "priceCurrency": "USD"},
-                    "hasCourseInstance": [
-                        {"@type": "CourseInstance", "courseMode": "Onsite" if mm == "campus" else "Online",
-                         **({"location": {"@type": "Place", "name": ADDRESS_LINE, "address": postal_address()}} if mm == "campus" else {})}
-                        for mm in m.split()
+                    "hasCourseInstance": {
+                        "@type": "CourseInstance",
+                        "courseMode": "Onsite",
+                        "location": {"@type": "Place", "name": ADDRESS_LINE, "address": postal_address()},
+                    },
+                    "syllabusSections": [
+                        {"@type": "Syllabus", "name": term, "description": "; ".join(f"{code} {title}" for code, title, _ in courses)}
+                        for term, courses in lv["terms"]
                     ],
                 },
             }
-            for i, (n, d, l, mode, fee, m) in enumerate(PROGRAMMES)
+            for lv in C.LEVELS
         ],
     }
 
@@ -536,10 +565,11 @@ HOME = f"""
     <section class="section">
       <div class="wrap">
         <div class="section-head">
-          <h2>Programmes</h2>
-          <a class="link-arrow" href="/programmes">All six programmes</a>
+          <h2>From Certificate to PhD</h2>
+          <a class="link-arrow" href="/curriculum">See the full curriculum</a>
         </div>
-{prog_table([PROGRAMMES[0], PROGRAMMES[1], PROGRAMMES[2]])}
+        <p class="section-lede">Six levels of study, each building on the last. Start where you are and keep going as far as God calls you.</p>
+{ladder()}
       </div>
     </section>
 
@@ -567,11 +597,16 @@ HOME = f"""
 
     <section class="section">
       <div class="wrap feature feature--statement">
-        <h2>Small classes. Serious reading. Real ministry.</h2>
+        <h2>Formation, not just information.</h2>
         <div class="feature__text">
-          <p>Most classes meet around a table, not in a lecture hall. From your second term you serve every week with a partner church in Accra, so what you learn on Monday is tested by Sunday.</p>
-          <a class="link-arrow" href="/about">How we teach</a>
+          <p>{C.PHILOSOPHY}</p>
+          <a class="link-arrow" href="/curriculum#formation">Our formation philosophy</a>
         </div>
+      </div>
+      <div class="wrap">
+        <ol class="pathway" aria-label="The formation pathway">
+{pathway()}
+        </ol>
       </div>
     </section>
 {voices()}
@@ -614,17 +649,17 @@ HOME = f"""
   </main>
 """
 
-PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six programmes, from a twelve-week evening course to a three-year degree. Every one can be started in January or September, on campus in East Legon, Accra, or online.") + f"""
+PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six levels of study, from a one-year Certificate in Christian Foundations to a PhD in Biblical &amp; Theological Studies, taught at Christian Service Church in East Legon, Accra.") + f"""
   <main id="main">
     <section class="section section--flush">
       <div class="wrap">
-        <div class="filter" role="group" aria-label="Filter by study mode">
-          <button type="button" aria-pressed="true" data-mode="all">All</button>
-          <button type="button" aria-pressed="false" data-mode="campus">On campus</button>
-          <button type="button" aria-pressed="false" data-mode="online">Online</button>
+        <div class="filter" role="group" aria-label="Filter by stage">
+          <button type="button" aria-pressed="true" data-group="all">All levels</button>
+          <button type="button" aria-pressed="false" data-group="undergraduate">Undergraduate</button>
+          <button type="button" aria-pressed="false" data-group="postgraduate">Postgraduate</button>
         </div>
-{prog_table(PROGRAMMES)}
-        <p class="note">Fees are shown in US dollars for international comparison; Ghanaian students can pay in cedis at the current rate. Campus fees include books and lunch. Online students pay 20% less and buy their own textbooks. Hostel rooms are charged separately.</p>
+{prog_table(C.LEVELS)}
+        <p class="note">Every course, semester by semester, is on the <a href="/curriculum">curriculum page</a>. Contact admissions for current fees; hostel rooms are charged separately.</p>
       </div>
     </section>
 
@@ -633,16 +668,21 @@ PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six programmes, from a 
         <div>
           <h2>Entry requirements</h2>
           <ul class="list">
-            <li>A recommendation from your pastor or church leader</li>
-            <li>WASSCE or an equivalent secondary qualification for diploma and degree programmes</li>
-            <li>English at a level where you can read academic texts comfortably</li>
+            <li>A recommendation from your pastor or church leader, for every level</li>
+            <li>Certificate: open to new and growing believers</li>
+            <li>Diploma and Bachelor: WASSCE or an equivalent secondary qualification</li>
+            <li>Master: a bachelor’s degree, usually in theology or ministry</li>
+            <li>DMin: a master’s degree and active ministry experience</li>
+            <li>PhD: a master’s degree with a research component</li>
           </ul>
-          <p class="muted">No previous theological study is needed. International qualifications are accepted; if you have studied elsewhere, you may be able to transfer up to a third of a programme.</p>
+          <p class="muted">International qualifications are accepted. Teaching is in English.</p>
         </div>
         <div>
-          <h2>Studying online</h2>
-          <p>Online students follow the same syllabus and are taught by the same faculty. Lectures are recorded; seminars run twice a week at different times so that most time zones are covered.</p>
-          <p class="muted">You will need a reliable internet connection and about 15 hours a week for a full-time load.</p>
+          <h2>Ministry practicum</h2>
+          <p>At every level, students show what they can do, not just what they know. Practicum work includes:</p>
+          <ul class="list">
+{chr(10).join(f"            <li>{item}</li>" for item in C.PRACTICUM)}
+          </ul>
         </div>
       </div>
     </section>
@@ -650,13 +690,14 @@ PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six programmes, from a 
   </main>
 """
 
-ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began in 2001 with eleven students in a borrowed church hall. Today we teach around 400 students a year from Christian Service Church in East Legon, Accra, and online.") + """
+ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began in 2001 with eleven students in a borrowed church hall. Today we teach around 400 students a year from Christian Service Church in East Legon, Accra, and online.") + f"""
   <main id="main">
     <section class="section section--flush">
       <div class="wrap prose-split">
         <h2>What we are for</h2>
         <div class="prose">
-          <p>We exist to train people who will teach the Bible faithfully and care for the church well. Most of our graduates go on to serve in local congregations across Ghana and West Africa; others work in mission, chaplaincy, schools and the workplace around the world.</p>
+          <p class="prose__lead">{C.AIM}</p>
+          <p>Most of our graduates go on to serve in local congregations across Ghana and West Africa; others work in mission, chaplaincy, schools and the workplace around the world.</p>
           <p>We are evangelical and interdenominational. Students come from Anglican, Baptist, Pentecostal, Charismatic, Methodist and independent churches, and from many countries. All of them affirm our statement of faith.</p>
         </div>
       </div>
@@ -665,12 +706,10 @@ ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began
     <section class="section section--tint">
       <div class="wrap feature">
         <div class="feature__text">
-          <h2>How we teach</h2>
-          <p>Classes are small and you will be expected to read a lot, write regularly and explain a passage to people who did not come to hear a lecture.</p>
-          <dl class="pillars">
-            <div><dt>Scripture</dt><dd>Every student reads the whole Bible in their first year and takes at least one term of Greek.</dd></div>
-            <div><dt>Formation</dt><dd>Groups of eight meet weekly with a tutor to pray and talk honestly.</dd></div>
-            <div><dt>Practice</dt><dd>From the second term you serve each week with a partner church in Accra.</dd></div>
+          <h2>How we form students</h2>
+          <p>{C.PHILOSOPHY}</p>
+          <dl class="pillars pillars--four">
+{chr(10).join(f"            <div><dt>{d}</dt><dd>{q}</dd></div>" for d, q in C.DIMENSIONS)}
           </dl>
         </div>
         <figure class="timetable">
@@ -702,7 +741,7 @@ ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began
         </ul>
       </div>
     </section>
-""" + CTA + """
+{CTA}
   </main>
 """
 
@@ -748,7 +787,7 @@ ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are a
         <div>
           <h2>International students</h2>
           <p>Students from outside Ghana apply in the same way and are taught alongside Ghanaian classmates. English is the language of teaching.</p>
-          <p class="muted">Prefer not to relocate? Every campus programme except the Diploma in Pastoral Ministry can also be taken online.</p>
+          <p class="muted">Prefer not to relocate? Ask admissions which courses can currently be followed online.</p>
         </div>
         <div>
           <ul class="list list--light">
@@ -757,7 +796,7 @@ ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are a
             <li>A room in our East Legon hostel, ready when you land</li>
             <li>Help with a local SIM card, mobile money and banking</li>
             <li>An orientation week covering study, church life and Accra</li>
-            <li>Fees quoted in US dollars, so you know the cost in advance</li>
+            <li>Fees confirmed in writing before you travel</li>
           </ul>
         </div>
       </div>
@@ -767,7 +806,7 @@ ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are a
       <div class="wrap columns">
         <div>
           <h2>Fees and bursaries</h2>
-          <p>Fees are listed with each programme and are charged per year. Campus fees include books and lunch; hostel accommodation is separate.</p>
+          <p>Fees are charged per semester and depend on the level of study. Ask admissions for the current schedule; hostel accommodation is charged separately.</p>
           <p class="muted">68% of current students receive a bursary. Most awards cover between a quarter and three quarters of fees, and are based on household income and church support.</p>
         </div>
         <div>
@@ -945,12 +984,7 @@ ENQUIRE = page_head("Enquire", "Request a prospectus", "Tell us a little about y
             <label for="f-programme">Programme</label>
             <select id="f-programme" name="programme" required>
               <option value="">Select a programme</option>
-              <option>Certificate in Biblical Studies</option>
-              <option>Diploma in Pastoral Ministry</option>
-              <option>Bachelor of Theology</option>
-              <option>Diploma in Missions</option>
-              <option>Certificate in Biblical Counselling</option>
-              <option>Evening School of Discipleship</option>
+{chr(10).join(f"              <option>{lv['name']}</option>" for lv in C.LEVELS)}
               <option>Not sure yet</option>
             </select>
           </div>
@@ -982,17 +1016,120 @@ ENQUIRE = page_head("Enquire", "Request a prospectus", "Tell us a little about y
   </main>
 """
 
+PDF = "/ezekiel-bible-institute-curriculum.pdf"
+
+
+def course_rows(courses):
+    return "\n".join(f"""                <li>
+                  <span class="course__code">{code}</span>
+                  <span class="course__title">{title}{f'<small>{topics}</small>' if topics else ''}</span>
+                </li>""" for code, title, topics in courses)
+
+
+def level_article(lv):
+    terms = "\n".join(f"""            <details class="term"{' open' if i == 0 else ''}>
+              <summary><span>{term}</span><span class="term__count">{len(courses)} {'courses' if len(courses) != 1 else 'course'}</span></summary>
+              <ul class="courses">
+{course_rows(courses)}
+              </ul>
+            </details>""" for i, (term, courses) in enumerate(lv["terms"]))
+    return f"""
+        <article class="level" id="{lv['slug']}" aria-labelledby="{lv['slug']}-title">
+          <header class="level__head">
+            <p class="level__n">Level 0{lv['n']} <span>{STAGE_LABEL[lv['stage']]}</span></p>
+            <h2 id="{lv['slug']}-title">{lv['name']}</h2>
+            <dl class="level__meta">
+              <div><dt>Length</dt><dd>{lv['length']}</dd></div>
+              <div><dt>Structure</dt><dd>{semesters_text(lv)}</dd></div>
+            </dl>
+            <p class="level__purpose">{lv['purpose']}</p>
+            <p class="level__outcome">“{lv['outcome']}”</p>
+          </header>
+          <div class="level__terms">
+{terms}
+          </div>
+        </article>"""
+
+
+CURRICULUM = page_head("Curriculum", "The curriculum", f"“{C.MOTTO[0]}” {C.MOTTO[1]}. Six levels of study, every course listed semester by semester.") + f"""
+  <main id="main">
+    <section class="section section--flush" id="formation">
+      <div class="wrap feature feature--statement">
+        <h2>Knowledge that becomes conviction, character and service.</h2>
+        <div class="feature__text">
+          <p>{C.PHILOSOPHY}</p>
+          <a class="button" href="{PDF}" download>Download the curriculum (PDF)</a>
+        </div>
+      </div>
+      <div class="wrap">
+        <ol class="pathway" aria-label="The formation pathway">
+{pathway()}
+        </ol>
+        <dl class="dimensions">
+{chr(10).join(f'          <div><dt>{d}</dt><dd>{q}</dd></div>' for d, q in C.DIMENSIONS)}
+        </dl>
+      </div>
+    </section>
+
+    <section class="section section--tint">
+      <div class="wrap curriculum">
+        <nav class="curriculum__nav" aria-label="Levels">
+          <p>Levels</p>
+          <ol>
+{chr(10).join(f'            <li><a href="#{lv["slug"]}"><span>0{lv["n"]}</span>{lv["short"]}</a></li>' for lv in C.LEVELS)}
+          </ol>
+        </nav>
+        <div class="curriculum__levels">
+{"".join(level_article(lv) for lv in C.LEVELS)}
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap columns">
+        <div>
+          <h2>Ministry practicum &amp; portfolio</h2>
+          <p>Students demonstrate ministry competence, not just knowledge, through:</p>
+          <ul class="list">
+{chr(10).join(f"            <li>{item}</li>" for item in C.PRACTICUM)}
+          </ul>
+        </div>
+        <div>
+          <h2>Programme progression</h2>
+          <ol class="progression">
+{chr(10).join(f'            <li><strong>{lv["short"]}</strong> {lv["outcome"]}</li>' for lv in C.LEVELS)}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="voices voices--static" aria-labelledby="profile-title">
+      {RINGS}
+      <div class="wrap voices__inner">
+        <p class="voices__label" id="profile-title">The graduate we pray for</p>
+        <blockquote class="profile"><p>{C.GRADUATE_PROFILE}</p></blockquote>
+        <div class="profile__actions">
+          <a class="button button--gold" href="/enquire">Start your application</a>
+          <a class="link-arrow link-arrow--light" href="{PDF}" download>Download the curriculum</a>
+        </div>
+      </div>
+    </section>
+  </main>
+"""
+
 NOT_FOUND = page_head("Not found", "We couldn’t find that page.", "It may have moved. Try the <a href=\"/\">homepage</a> or <a href=\"/programmes\">programmes</a>.") + """
   <main id="main"></main>
 """
 
 PAGES = {
-    "index.html": ("Home", "Ezekiel Bible Institute is a Bible school in East Legon, Accra, Ghana. Certificate, diploma and degree programmes in theology and ministry, on campus with hostel accommodation or online. International students welcome.", "/", HOME,
+    "index.html": ("Home", "Ezekiel Bible Institute is a Bible school in East Legon, Accra, Ghana, offering six levels of study from Certificate to PhD in theology and ministry, with hostel accommodation. International students welcome.", "/", HOME,
                    [ORG, WEBSITE, faq_ld(HOME_FAQ), *events_ld()]),
-    "programmes.html": ("Programmes", "Bible and theology programmes in Accra, Ghana: Bachelor of Theology, diplomas in Pastoral Ministry and Missions, and certificates. Study on campus in East Legon or online.", "/programmes", PROGRAMMES_PAGE,
+    "programmes.html": ("Programmes", "Bible and theology programmes in Accra, Ghana, from Certificate to PhD: Certificate in Christian Foundations, Diploma in Christian Ministry, Bachelor and Master of Theology, DMin and PhD.", "/programmes", PROGRAMMES_PAGE,
                         [breadcrumbs("/programmes", "Programmes"), courses_ld()]),
     "about.html": ("About", "About Ezekiel Bible Institute: an evangelical, interdenominational Bible school training pastors and church leaders at Christian Service Church, East Legon, Accra, since 2001.", "/about", ABOUT,
                    [breadcrumbs("/about", "About"), ORG]),
+    "curriculum.html": ("Curriculum", "The Ezekiel Bible Institute curriculum: Certificate in Christian Foundations, Diploma, Bachelor and Master of Theology, Doctor of Ministry and PhD. Every course, semester by semester.", "/curriculum", CURRICULUM,
+                        [breadcrumbs("/curriculum", "Curriculum"), courses_ld()]),
     "admissions.html": ("Admissions", "How to apply to Ezekiel Bible Institute in Accra, Ghana: key dates, fees, bursaries, hostel accommodation and support for international students.", "/admissions", ADMISSIONS,
                         [breadcrumbs("/admissions", "Admissions"), faq_ld(ADMISSIONS_FAQ)]),
     "hostel.html": ("Hostel", "Student hostel at Ezekiel Bible Institute, East Legon, Accra: furnished shared rooms, Wi-Fi, study room and 24-hour security for Ghanaian and international students.", "/hostel", HOSTEL,

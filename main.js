@@ -89,7 +89,7 @@ if (slides.length > 1 && !reduceMotion) {
 }
 
 // Student stories
-const voices = document.querySelector(".voices");
+const voices = document.querySelector(".voices__slides")?.closest(".voices");
 
 if (voices) {
   const slides = voices.querySelectorAll(".voices__slide");
@@ -168,12 +168,27 @@ if (filter) {
   filter.addEventListener("click", (e) => {
     const btn = e.target.closest("button");
     if (!btn) return;
-    const { mode } = btn.dataset;
+    const { group } = btn.dataset;
     buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
     rows.forEach((row) => {
-      row.hidden = mode !== "all" && !row.dataset.modes.includes(mode);
+      row.hidden = group !== "all" && row.dataset.group !== group;
     });
   });
+}
+
+// Curriculum: highlight the level in view
+const levelNav = document.querySelector(".curriculum__nav");
+
+if (levelNav && "IntersectionObserver" in window) {
+  const links = new Map([...levelNav.querySelectorAll("a")].map((a) => [a.hash.slice(1), a]));
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      links.forEach((a) => a.removeAttribute("aria-current"));
+      links.get(entry.target.id)?.setAttribute("aria-current", "true");
+    });
+  }, { rootMargin: "-40% 0px -55% 0px" });
+  document.querySelectorAll(".level").forEach((el) => spy.observe(el));
 }
 
 // Enquiry form
