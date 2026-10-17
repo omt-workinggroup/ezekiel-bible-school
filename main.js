@@ -42,6 +42,18 @@ desktop.addEventListener("change", (e) => {
   if (e.matches) closeMenu({ restoreFocus: false });
 });
 
+// Hero slideshow
+const slides = document.querySelectorAll(".hero__slide");
+
+if (slides.length > 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove("is-active");
+    current = (current + 1) % slides.length;
+    slides[current].classList.add("is-active");
+  }, 7000);
+}
+
 // Programme filter
 const filter = document.querySelector(".filter");
 

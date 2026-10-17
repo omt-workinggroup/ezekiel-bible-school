@@ -10,8 +10,15 @@
   <meta property="og:title" content="Ezekiel Bible Institute">
   <meta property="og:description" content="Certificate, diploma and degree programmes in Bible, theology and ministry, on campus or online.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://ezekiel-bible-school.vercel.app/og-image.png">
+  <meta property="og:site_name" content="Ezekiel Bible Institute">
+  <meta property="og:url" content="https://ezekiel-bible-school.vercel.app/">
+  <meta property="og:image" content="https://ezekiel-bible-school.vercel.app/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Ezekiel Bible Institute: Study Scripture closely. Serve the church well.">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://ezekiel-bible-school.vercel.app/og-image.jpg">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
@@ -89,33 +96,38 @@
   </div>
 
   <main id="main">
-    <section class="hero">
-      <svg class="hero__halo" viewBox="0 0 600 600" aria-hidden="true">
-        <circle cx="300" cy="300" r="296" />
-        <circle cx="300" cy="300" r="230" />
-      </svg>
-      <div class="wrap hero__grid">
-        <div>
-          <h1>Study Scripture closely.<br>Serve the church well.</h1>
-          <p class="lede">Theological training for pastors, missionaries and church leaders since 2001. On campus in Hope City or online from anywhere.</p>
-          <div class="hero__actions">
-            <a class="button" href="/enquire">Request a prospectus</a>
-            <a class="link-arrow" href="/programmes">Our programmes</a>
-          </div>
-        </div>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__media" aria-hidden="true">
 
-        <aside class="intake" aria-labelledby="intake-title">
-          <h2 id="intake-title">January 2027 intake</h2>
-          <dl>
-            <div><dt>Open day</dt><dd>Sat 7 Nov</dd></div>
-            <div><dt>Applications close</dt><dd>Mon 30 Nov</dd></div>
-            <div><dt>Term begins</dt><dd>Mon 11 Jan</dd></div>
-          </dl>
-        </aside>
+        <svg class="hero__mark"><use href="#mark"/></svg>
+        <svg class="hero__rings" viewBox="0 0 600 600"><circle cx="300" cy="300" r="298"/><circle cx="300" cy="300" r="236"/><circle cx="300" cy="300" r="174"/></svg>
+      </div>
+
+      <div class="wrap hero__body">
+        <p class="hero__kicker">Ezekiel Bible Institute <span aria-hidden="true">·</span> Since 2001</p>
+        <h1 id="hero-title" class="hero__title">
+          <span class="line"><span>Study Scripture</span></span>
+          <span class="line"><span>closely.</span></span>
+          <span class="line"><span><em>Serve the church well.</em></span></span>
+        </h1>
+        <p class="hero__lede">Theological training for pastors, missionaries and church leaders. On campus in Hope City or online from anywhere.</p>
+        <div class="hero__actions">
+          <a class="button button--gold" href="/enquire">Request a prospectus</a>
+          <a class="link-arrow link-arrow--light" href="/programmes">Explore programmes</a>
+        </div>
+      </div>
+
+      <div class="wrap hero__foot">
+        <dl class="hero__dates">
+          <div><dt>Open day</dt><dd>Sat 7 Nov</dd></div>
+          <div><dt>Applications close</dt><dd>Mon 30 Nov</dd></div>
+          <div><dt>Term begins</dt><dd>Mon 11 Jan</dd></div>
+        </dl>
+        <a class="hero__scroll" href="#after-hero"><span>Scroll</span></a>
       </div>
     </section>
 
-    <section class="facts" aria-label="At a glance">
+    <section class="facts" id="after-hero" aria-label="At a glance">
       <ul class="wrap facts__list">
         <li><strong>25</strong> years of teaching</li>
         <li><strong>3,200</strong> graduates in ministry</li>
