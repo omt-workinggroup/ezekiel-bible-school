@@ -162,9 +162,9 @@
 
     <section class="facts" id="after-hero" aria-label="At a glance">
       <ul class="wrap facts__list">
-        <li><strong>25</strong> years of teaching</li>
-        <li><strong>3,200</strong> graduates in ministry</li>
-        <li><strong>41</strong> countries this year</li>
+        <li><strong data-count="25">25</strong> years of teaching</li>
+        <li><strong data-count="3200">3,200</strong> graduates in ministry</li>
+        <li><strong data-count="41">41</strong> countries this year</li>
         <li><strong>1 : 12</strong> tutor to student</li>
       </ul>
     </section>
@@ -231,18 +231,51 @@
     </section>
 
     <section class="section">
-      <div class="wrap feature">
+      <div class="wrap feature feature--statement">
+        <h2>Small classes. Serious reading. Real ministry.</h2>
         <div class="feature__text">
-          <h2>Small classes. Serious reading. Real ministry.</h2>
-          <p>Most classes meet around a table, not in a lecture hall. From your second term you serve every week with a partner church, so what you learn on Monday is tested by Sunday.</p>
+          <p>Most classes meet around a table, not in a lecture hall. From your second term you serve every week with a partner church in Accra, so what you learn on Monday is tested by Sunday.</p>
           <a class="link-arrow" href="/about">How we teach</a>
         </div>
-        <blockquote class="feature__quote">
-          <p>I arrived wanting to preach. I left knowing how to listen to the text first, and to the people in front of me second.</p>
-          <footer>Joseph Adebayo <span>Diploma in Pastoral Ministry, 2022</span></footer>
-        </blockquote>
       </div>
     </section>
+
+    <section class="voices" aria-roledescription="carousel" aria-label="Student stories">
+      <svg class="rings" viewBox="0 0 600 600" aria-hidden="true"><circle cx="300" cy="300" r="298"/><circle cx="300" cy="300" r="236"/><circle cx="300" cy="300" r="174"/></svg>
+      <div class="wrap voices__inner">
+        <p class="voices__label">Student stories</p>
+        <div class="voices__slides" aria-live="polite">
+          <figure class="voices__slide is-active" id="voice-1" aria-roledescription="slide" aria-label="1 of 3">
+            <blockquote><p>I arrived wanting to preach. I left knowing how to listen to the text first, and to the people in front of me second.</p></blockquote>
+            <figcaption><strong>Joseph Adebayo</strong> <span>Lagos, Nigeria</span> <span>Diploma in Pastoral Ministry, 2022</span></figcaption>
+          </figure>
+          <figure class="voices__slide" id="voice-2" aria-roledescription="slide" aria-label="2 of 3" hidden>
+            <blockquote><p>I studied online around a full-time job in Kumasi. My tutor replied to every email, usually the same day, and the seminars felt like a real classroom.</p></blockquote>
+            <figcaption><strong>Ama Owusu</strong> <span>Kumasi, Ghana</span> <span>Bachelor of Theology, 2024</span></figcaption>
+          </figure>
+          <figure class="voices__slide" id="voice-3" aria-roledescription="slide" aria-label="3 of 3" hidden>
+            <blockquote><p>I had never left Liberia. Someone was waiting for me at Kotoka, my room was ready, and by the second week the hostel felt like family.</p></blockquote>
+            <figcaption><strong>Samuel Kollie</strong> <span>Monrovia, Liberia</span> <span>Diploma in Missions, 2025</span></figcaption>
+          </figure>
+        </div>
+        <div class="voices__controls">
+          <button type="button" class="voices__btn" data-dir="-1" aria-label="Previous story"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <span class="voices__count"><span data-current>01</span> / 03</span>
+          <button type="button" class="voices__btn" data-dir="1" aria-label="Next story"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="voices__progress" aria-hidden="true"><span></span></span>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="nations" aria-label="Where our students come from">
+      <p class="wrap nations__label">Our students come from</p>
+      <div class="nations__track">
+        <ul class="nations__list"><li>Ghana</li><li>Nigeria</li><li>Liberia</li><li>Sierra Leone</li><li>Togo</li><li>Côte d’Ivoire</li><li>Cameroon</li><li>Kenya</li><li>Uganda</li><li>South Africa</li><li>Zambia</li><li>United Kingdom</li><li>United States</li><li>Germany</li></ul>
+        <ul class="nations__list" aria-hidden="true"><li>Ghana</li><li>Nigeria</li><li>Liberia</li><li>Sierra Leone</li><li>Togo</li><li>Côte d’Ivoire</li><li>Cameroon</li><li>Kenya</li><li>Uganda</li><li>South Africa</li><li>Zambia</li><li>United Kingdom</li><li>United States</li><li>Germany</li></ul>
+      </div>
+    </section>
+
 
     <section class="section section--tint location" id="location" aria-labelledby="location-title">
       <div class="wrap location__grid">

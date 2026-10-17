@@ -88,6 +88,76 @@ if (slides.length > 1 && !reduceMotion) {
   }, 7000);
 }
 
+// Student stories
+const voices = document.querySelector(".voices");
+
+if (voices) {
+  const slides = voices.querySelectorAll(".voices__slide");
+  const current = voices.querySelector("[data-current]");
+  const bar = voices.querySelector(".voices__progress span");
+  let index = 0;
+  let timer;
+
+  const show = (next) => {
+    slides[index].classList.remove("is-active");
+    slides[index].hidden = true;
+    index = (next + slides.length) % slides.length;
+    slides[index].hidden = false;
+    slides[index].classList.add("is-active");
+    current.textContent = String(index + 1).padStart(2, "0");
+  };
+
+  const restart = () => {
+    clearTimeout(timer);
+    bar.classList.remove("is-running");
+    if (reduceMotion) return;
+    void bar.offsetWidth;
+    bar.classList.add("is-running");
+    timer = setTimeout(() => { show(index + 1); restart(); }, 8000);
+  };
+
+  voices.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-dir]");
+    if (!btn) return;
+    show(index + Number(btn.dataset.dir));
+    restart();
+  });
+
+  let startX = null;
+  voices.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
+  voices.addEventListener("touchend", (e) => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) { show(index + (dx < 0 ? 1 : -1)); restart(); }
+    startX = null;
+  });
+
+  restart();
+}
+
+// Count up the numbers strip when it comes into view
+const counters = document.querySelectorAll("[data-count]");
+
+if (counters.length && "IntersectionObserver" in window && !reduceMotion) {
+  const fmt = new Intl.NumberFormat("en-GB");
+  const run = (el) => {
+    const target = Number(el.dataset.count);
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min((now - start) / 1600, 1);
+      el.textContent = fmt.format(Math.round(target * (1 - Math.pow(1 - t, 4))));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  const co = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) { run(entry.target); co.unobserve(entry.target); }
+    });
+  }, { threshold: 0.6 });
+  counters.forEach((el) => co.observe(el));
+}
+
 // Programme filter
 const filter = document.querySelector(".filter");
 

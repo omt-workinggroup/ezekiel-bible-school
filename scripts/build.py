@@ -351,6 +351,55 @@ def hero_slides():
 
 # ---------------------------------------------------------------- pages
 
+COUNTRIES = ['Ghana', 'Nigeria', 'Liberia', 'Sierra Leone', 'Togo', 'Côte d’Ivoire', 'Cameroon', 'Kenya', 'Uganda', 'South Africa', 'Zambia', 'United Kingdom', 'United States', 'Germany']
+
+
+def countries_band():
+    items = "".join(f"<li>{c}</li>" for c in COUNTRIES)
+    return f"""
+    <section class="nations" aria-label="Where our students come from">
+      <p class="wrap nations__label">Our students come from</p>
+      <div class="nations__track">
+        <ul class="nations__list">{items}</ul>
+        <ul class="nations__list" aria-hidden="true">{items}</ul>
+      </div>
+    </section>
+"""
+
+
+VOICES = [
+    ("I arrived wanting to preach. I left knowing how to listen to the text first, and to the people in front of me second.",
+     "Joseph Adebayo", "Lagos, Nigeria", "Diploma in Pastoral Ministry, 2022"),
+    ("I studied online around a full-time job in Kumasi. My tutor replied to every email, usually the same day, and the seminars felt like a real classroom.",
+     "Ama Owusu", "Kumasi, Ghana", "Bachelor of Theology, 2024"),
+    ("I had never left Liberia. Someone was waiting for me at Kotoka, my room was ready, and by the second week the hostel felt like family.",
+     "Samuel Kollie", "Monrovia, Liberia", "Diploma in Missions, 2025"),
+]
+
+
+def voices():
+    slides = "\n".join(f"""          <figure class="voices__slide{' is-active' if i == 0 else ''}" id="voice-{i + 1}" aria-roledescription="slide" aria-label="{i + 1} of {len(VOICES)}"{'' if i == 0 else ' hidden'}>
+            <blockquote><p>{q}</p></blockquote>
+            <figcaption><strong>{n}</strong> <span>{place}</span> <span>{prog}</span></figcaption>
+          </figure>""" for i, (q, n, place, prog) in enumerate(VOICES))
+    return f"""
+    <section class="voices" aria-roledescription="carousel" aria-label="Student stories">
+      {RINGS}
+      <div class="wrap voices__inner">
+        <p class="voices__label">Student stories</p>
+        <div class="voices__slides" aria-live="polite">
+{slides}
+        </div>
+        <div class="voices__controls">
+          <button type="button" class="voices__btn" data-dir="-1" aria-label="Previous story"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <span class="voices__count"><span data-current>01</span> / {len(VOICES):02d}</span>
+          <button type="button" class="voices__btn" data-dir="1" aria-label="Next story"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="voices__progress" aria-hidden="true"><span></span></span>
+        </div>
+      </div>
+    </section>
+"""
+
 HOME_FAQ = [
     ("Where is Ezekiel Bible Institute located?",
      "Ezekiel Bible Institute meets at Christian Service Church in East Legon, Accra, in the Greater Accra Region of Ghana. Online students can study from anywhere in the world."),
@@ -477,9 +526,9 @@ HOME = f"""
 
     <section class="facts" id="after-hero" aria-label="At a glance">
       <ul class="wrap facts__list">
-        <li><strong>25</strong> years of teaching</li>
-        <li><strong>3,200</strong> graduates in ministry</li>
-        <li><strong>41</strong> countries this year</li>
+        <li><strong data-count="25">25</strong> years of teaching</li>
+        <li><strong data-count="3200">3,200</strong> graduates in ministry</li>
+        <li><strong data-count="41">41</strong> countries this year</li>
         <li><strong>1 : 12</strong> tutor to student</li>
       </ul>
     </section>
@@ -517,18 +566,16 @@ HOME = f"""
     </section>
 
     <section class="section">
-      <div class="wrap feature">
+      <div class="wrap feature feature--statement">
+        <h2>Small classes. Serious reading. Real ministry.</h2>
         <div class="feature__text">
-          <h2>Small classes. Serious reading. Real ministry.</h2>
-          <p>Most classes meet around a table, not in a lecture hall. From your second term you serve every week with a partner church, so what you learn on Monday is tested by Sunday.</p>
+          <p>Most classes meet around a table, not in a lecture hall. From your second term you serve every week with a partner church in Accra, so what you learn on Monday is tested by Sunday.</p>
           <a class="link-arrow" href="/about">How we teach</a>
         </div>
-        <blockquote class="feature__quote">
-          <p>I arrived wanting to preach. I left knowing how to listen to the text first, and to the people in front of me second.</p>
-          <footer>Joseph Adebayo <span>Diploma in Pastoral Ministry, 2022</span></footer>
-        </blockquote>
       </div>
     </section>
+{voices()}
+{countries_band()}
 
     <section class="section section--tint location" id="location" aria-labelledby="location-title">
       <div class="wrap location__grid">
