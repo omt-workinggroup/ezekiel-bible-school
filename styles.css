@@ -1074,3 +1074,136 @@ address { margin-bottom: 1rem; font-size: 1.125rem; }
     transition-delay: 0s !important;
   }
 }
+
+/* Hero tags */
+.hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  opacity: 0;
+  animation: fade 1s var(--ease-out) 0.7s forwards;
+}
+.hero__tags a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+  padding: 0 0.9rem;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.05);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #dfe5ef;
+  text-decoration: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.hero__tags a::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--gold-bright);
+}
+.hero__tags a:hover { border-color: var(--gold-bright); background: rgb(214 169 72 / 0.12); }
+@media (prefers-reduced-motion: reduce) {
+  .hero__tags { opacity: 1; animation: none; }
+}
+
+/* Tiles (hostel / international) */
+.tiles { display: grid; gap: 1rem; }
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 2rem 1.5rem;
+  overflow: hidden;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  text-decoration: none;
+  transition: border-color 0.3s, transform 0.3s var(--ease-out);
+}
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease-out);
+}
+.tile:hover { border-color: var(--ink-3); transform: translateY(-2px); }
+.tile:hover::after { transform: scaleX(1); }
+.tile__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.tile h3 { font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem); font-weight: 400; letter-spacing: -0.01em; }
+.tile p { margin: 0; color: var(--ink-2); }
+.tile .link-arrow { margin-top: auto; padding-top: 0.75rem; }
+@media (min-width: 48em) {
+  .tiles { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .tile { padding: 2.5rem; }
+}
+
+/* Location */
+.location__grid { display: grid; gap: 2.5rem; align-items: center; }
+.location h2 { margin-bottom: 1.25rem; }
+.location__address {
+  margin-bottom: 1.5rem;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  line-height: 1.4;
+}
+.location__facts { max-width: 26rem; margin-bottom: 1.75rem; }
+.location__facts div,
+.location .hours div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.9375rem;
+}
+.location .hours { max-width: 26rem; margin-bottom: 1.25rem; }
+.location__facts dt { color: var(--ink-3); }
+.location__facts dd { font-weight: 600; text-align: right; }
+.location__facts a { text-decoration: none; }
+.location__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; }
+.map {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+}
+.map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; filter: grayscale(0.35) contrast(1.05); }
+@media (min-width: 56em) {
+  .location__grid { grid-template-columns: 1fr 1.3fr; gap: 4.5rem; }
+}
+
+/* Dark section */
+.section--dark { background: var(--navy); color: var(--paper); }
+.section--dark h2 { color: var(--paper); }
+.section--dark p { color: #d5dce8; }
+.section--dark .muted { color: #aebbd0; }
+.list--light li { border-bottom-color: rgb(255 255 255 / 0.14); color: var(--paper); }
+.list--light li::before { background: var(--gold-bright); }
+
+/* Hostel amenities */
+.amenities { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.amenities li { padding: 1.5rem; background: var(--white); }
+.amenities h3 { margin-bottom: 0.35rem; font-size: 1.15rem; }
+.amenities p { margin: 0; font-size: 0.9375rem; color: var(--ink-2); }
+@media (min-width: 40em) { .amenities { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 64em) { .amenities { grid-template-columns: repeat(4, 1fr); } }
+
+.footer address { margin-bottom: 1rem; }

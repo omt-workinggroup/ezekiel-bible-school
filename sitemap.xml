@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://ezekiel-bible-school.vercel.app/</loc></url>
-  <url><loc>https://ezekiel-bible-school.vercel.app/programmes</loc></url>
-  <url><loc>https://ezekiel-bible-school.vercel.app/about</loc></url>
-  <url><loc>https://ezekiel-bible-school.vercel.app/admissions</loc></url>
-  <url><loc>https://ezekiel-bible-school.vercel.app/visit</loc></url>
-  <url><loc>https://ezekiel-bible-school.vercel.app/enquire</loc></url>
+  <url><loc>https://ezekiel-bible-school.vercel.app/</loc><lastmod>2026-10-17</lastmod></url>
+  <url><loc>https://ezekiel-bible-school.vercel.app/programmes</loc><lastmod>2026-10-17</lastmod></url>
+  <url><loc>https://ezekiel-bible-school.vercel.app/about</loc><lastmod>2026-10-17</lastmod></url>
+  <url><loc>https://ezekiel-bible-school.vercel.app/admissions</loc><lastmod>2026-10-17</lastmod></url>
+  <url><loc>https://ezekiel-bible-school.vercel.app/hostel</loc><lastmod>2026-10-17</lastmod></url>
+  <url><loc>https://ezekiel-bible-school.vercel.app/visit</loc><lastmod>2026-10-17</lastmod></url>
+  <url><loc>https://ezekiel-bible-school.vercel.app/enquire</loc><lastmod>2026-10-17</lastmod></url>
 </urlset>

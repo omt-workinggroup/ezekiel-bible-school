@@ -18,7 +18,8 @@ python3 -m http.server 8000
 | `programmes.html` | Programmes, entry requirements, online study |
 | `about.html` | History, teaching approach, faculty |
 | `admissions.html` | How to apply, key dates, fees, FAQ |
-| `visit.html` | Events, location, office hours |
+| `hostel.html` | Student hostel and facilities |
+| `visit.html` | Events, location, map, office hours |
 | `enquire.html` | Prospectus request form |
 | `404.html` | Not found |
 
@@ -40,6 +41,18 @@ list them in `HERO_IMAGES` near the top of `scripts/build.py`. With more than on
 photo the hero crossfades between them every seven seconds. With none, it shows
 the plain navy background.
 
+### Search and AI visibility
+
+Each page carries schema.org JSON-LD (organisation, courses, events, FAQ,
+hostel, breadcrumbs), Ghana geo meta tags and Open Graph tags, all generated
+by `scripts/build.py`. `sitemap.xml` is rebuilt with today's date on every
+build. `llms.txt` is a plain-text summary for AI assistants; keep it in step
+with the site.
+
+Contact details, the address and the map live in constants at the top of
+`scripts/build.py`. Once the church's GPS position is confirmed, set `GEO` there
+to add coordinates to the structured data.
+
 ### Icons
 
 `favicon.svg` and `favicon.ico` for browser tabs, `apple-touch-icon.png` for iOS,
@@ -53,6 +66,9 @@ Hosted on Vercel. Every push to `main` deploys to production; other branches get
 
 ## To do
 
-- [ ] Replace placeholder contact details, fees and dates
+- [ ] Replace placeholder phone, email, fees and dates (`scripts/build.py`)
+- [ ] Set `GEO` to the church's coordinates
+- [ ] Confirm hostel facilities and international student services
+- [ ] Create a Google Business Profile for the institute at the same address
 - [ ] Connect the enquiry form (Formspree or a Vercel function)
 - [ ] Add hero and campus photography (see Hero photos)

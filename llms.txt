@@ -1,0 +1,32 @@
+# Ezekiel Bible Institute
+
+> Ezekiel Bible Institute is an evangelical, interdenominational Bible school at Christian Service Church, East Legon, Accra, Ghana. Founded in 2001, it trains pastors, missionaries and church leaders through certificate, diploma and degree programmes in Bible, theology and ministry. Students study on campus in East Legon, with on-site hostel accommodation, or online from anywhere. Ghanaian and international students are welcome.
+
+## Key facts
+
+- Location: Christian Service Church, East Legon, Accra, Greater Accra Region, Ghana
+- Founded: 2001
+- Study modes: on campus (East Legon, Accra) and online
+- Students: Ghanaian and international; teaching is in English
+- Accommodation: student hostel on site, furnished shared rooms, separate wings for men and women
+- Intakes: January and September. January 2027 applications close 30 November 2026
+- Office hours: Monday to Friday, 08:00 to 16:30 GMT
+
+## Programmes
+
+- Certificate in Biblical Studies: 1 year, campus or online
+- Diploma in Pastoral Ministry: 2 years, campus
+- Bachelor of Theology: 3 years, campus or online
+- Diploma in Missions: 18 months, online
+- Certificate in Biblical Counselling: 6 months, campus or online
+- Evening School of Discipleship: 12 weeks, online
+
+## Pages
+
+- [Home](https://ezekiel-bible-school.vercel.app/): overview, location map, key dates
+- [Programmes](https://ezekiel-bible-school.vercel.app/programmes): all programmes, fees, entry requirements
+- [Admissions](https://ezekiel-bible-school.vercel.app/admissions): how to apply, international students, fees and bursaries, FAQ
+- [Hostel](https://ezekiel-bible-school.vercel.app/hostel): student accommodation and facilities
+- [About](https://ezekiel-bible-school.vercel.app/about): history, teaching approach, faculty
+- [Visit](https://ezekiel-bible-school.vercel.app/visit): events, open days, directions
+- [Enquire](https://ezekiel-bible-school.vercel.app/enquire): request a prospectus

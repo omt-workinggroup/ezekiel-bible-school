@@ -1,24 +1,145 @@
-"""Assemble the static pages with a shared header and footer."""
-import pathlib, sys
+"""Assemble the static pages with a shared header and footer.
+
+Usage: python3 scripts/build.py .
+"""
+import json, pathlib, sys
+from datetime import date
+from urllib.parse import quote
 
 OUT = pathlib.Path(sys.argv[1])
 
-NAV = [("/about", "About"), ("/programmes", "Programmes"), ("/admissions", "Admissions"), ("/visit", "Visit")]
+SITE = "https://ezekiel-bible-school.vercel.app"
+NAME = "Ezekiel Bible Institute"
+PHONE = "+233 00 000 0000"          # TODO: real number
+PHONE_HREF = "+233000000000"
+EMAIL = "admissions@example.com"    # TODO: real address
+ADDRESS = {
+    "street": "Christian Service Church",
+    "locality": "East Legon",
+    "city": "Accra",
+    "region": "Greater Accra",
+    "country": "GH",
+}
+ADDRESS_LINE = "Christian Service Church, East Legon, Accra, Ghana"
+# TODO: set to (latitude, longitude) of the church gate once confirmed.
+GEO = None
 
-def head(title, desc, path):
-    full = "Ezekiel Bible Institute" if path == "/" else f"{title} · Ezekiel Bible Institute"
+MAP_QUERY = quote(ADDRESS_LINE)
+MAP_EMBED = f"https://maps.google.com/maps?q={MAP_QUERY}&z=15&output=embed"
+MAP_LINK = f"https://www.google.com/maps/search/?api=1&query={MAP_QUERY}"
+
+NAV = [("/about", "About"), ("/programmes", "Programmes"), ("/admissions", "Admissions"), ("/hostel", "Hostel"), ("/visit", "Visit")]
+
+
+def ld(*objects):
+    """Render JSON-LD script tags."""
+    return "\n".join(
+        f'  <script type="application/ld+json">{json.dumps(o, ensure_ascii=False, separators=(",", ":"))}</script>'
+        for o in objects
+    )
+
+
+def postal_address():
+    return {
+        "@type": "PostalAddress",
+        "streetAddress": ADDRESS["street"],
+        "addressLocality": f'{ADDRESS["locality"]}, {ADDRESS["city"]}',
+        "addressRegion": ADDRESS["region"],
+        "addressCountry": ADDRESS["country"],
+    }
+
+
+ORG = {
+    "@context": "https://schema.org",
+    "@type": ["CollegeOrUniversity", "EducationalOrganization"],
+    "@id": f"{SITE}/#org",
+    "name": NAME,
+    "alternateName": ["EBI", "Ezekiel Bible School"],
+    "url": f"{SITE}/",
+    "logo": f"{SITE}/icon-512.png",
+    "image": f"{SITE}/og-image.jpg",
+    "description": "Ezekiel Bible Institute is an evangelical, interdenominational Bible school in East Legon, Accra, Ghana. It offers certificate, diploma and degree programmes in Bible, theology and ministry, on campus and online, with hostel accommodation. Ghanaian and international students are welcome.",
+    "slogan": "Study Scripture closely. Serve the church well.",
+    "foundingDate": "2001",
+    "address": postal_address(),
+    "hasMap": MAP_LINK,
+    "telephone": PHONE,
+    "email": EMAIL,
+    "knowsLanguage": "en",
+    "areaServed": [{"@type": "Country", "name": "Ghana"}, {"@type": "Place", "name": "West Africa"}, {"@type": "Place", "name": "Worldwide (online)"}],
+    "amenityFeature": [
+        {"@type": "LocationFeatureSpecification", "name": "Student hostel", "value": True},
+        {"@type": "LocationFeatureSpecification", "name": "Library", "value": True},
+        {"@type": "LocationFeatureSpecification", "name": "Wi-Fi", "value": True},
+    ],
+    "openingHoursSpecification": [{
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "08:00",
+        "closes": "16:30",
+    }],
+}
+if GEO:
+    ORG["geo"] = {"@type": "GeoCoordinates", "latitude": GEO[0], "longitude": GEO[1]}
+
+WEBSITE = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": f"{SITE}/#website",
+    "url": f"{SITE}/",
+    "name": NAME,
+    "inLanguage": "en-GH",
+    "publisher": {"@id": f"{SITE}/#org"},
+}
+
+
+def breadcrumbs(path, title):
+    return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE}/"},
+            {"@type": "ListItem", "position": 2, "name": title, "item": f"{SITE}{path}"},
+        ],
+    }
+
+
+def faq_ld(items):
+    return {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
+            for q, a in items
+        ],
+    }
+
+
+def faq_html(items):
+    return "\n".join(f"""          <details>
+            <summary>{q}</summary>
+            <p>{a}</p>
+          </details>""" for q, a in items)
+
+def head(title, desc, path, schema=()):
+    full = f"{NAME} | Bible School in East Legon, Accra, Ghana" if path == "/" else f"{title} | {NAME}, Accra"
+    geo_meta = f'\n  <meta name="geo.position" content="{GEO[0]};{GEO[1]}">\n  <meta name="ICBM" content="{GEO[0]}, {GEO[1]}">' if GEO else ""
     return f"""<!doctype html>
-<html lang="en">
+<html lang="en-GH">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{full}</title>
   <meta name="description" content="{desc}">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <link rel="canonical" href="https://ezekiel-bible-school.vercel.app{path}">
+  <meta name="geo.region" content="GH-AA">
+  <meta name="geo.placename" content="East Legon, Accra">{geo_meta}
   <meta name="theme-color" content="#fbf9f4">
   <meta property="og:title" content="{full}">
   <meta property="og:description" content="{desc}">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_GH">
   <meta property="og:site_name" content="Ezekiel Bible Institute">
   <meta property="og:url" content="https://ezekiel-bible-school.vercel.app{path}">
   <meta property="og:image" content="https://ezekiel-bible-school.vercel.app/og-image.jpg">
@@ -31,11 +152,13 @@ def head(title, desc, path):
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Plain-text summary for AI assistants">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Cinzel:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="/styles.css">
   <script src="/main.js" defer></script>
+{ld(*schema)}
 </head>"""
 
 def cur(href, path):
@@ -102,15 +225,15 @@ def header(path):
       <div class="menu__foot">
         <p class="menu__intake">January 2027 intake<br><span>Applications close 30 November</span></p>
         <p class="menu__contact">
-          <a href="tel:+10000000000">+1 (000) 000-0000</a>
-          <a href="mailto:admissions@example.com">admissions@example.com</a>
+          <a href="tel:{PHONE_HREF}">{PHONE}</a>
+          <a href="mailto:{EMAIL}">{EMAIL}</a>
         </p>
       </div>
     </div>
   </div>
 """
 
-FOOTER = """
+FOOTER = f"""
   <footer class="footer">
     <div class="wrap footer__grid">
       <div class="footer__about">
@@ -118,8 +241,9 @@ FOOTER = """
           <svg class="logo__mark" aria-hidden="true"><use href="#mark"/></svg>
           <span class="logo__word">Ezekiel<span>Bible Institute</span></span>
         </a>
-        <p>12 Covenant Avenue<br>Hope City</p>
-        <p><a href="tel:+10000000000">+1 (000) 000-0000</a><br><a href="mailto:office@example.com">office@example.com</a></p>
+        <address>Christian Service Church<br>East Legon, Accra, Ghana</address>
+        <p><a href="tel:{PHONE_HREF}">{PHONE}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></p>
+        <p><a href="{MAP_LINK}" rel="noopener">Get directions</a></p>
       </div>
       <nav class="footer__nav" aria-label="Footer">
         <div>
@@ -137,6 +261,8 @@ FOOTER = """
             <li><a href="/about">About</a></li>
             <li><a href="/about#faculty">Faculty</a></li>
             <li><a href="/visit">Events</a></li>
+            <li><a href="/hostel">Hostel</a></li>
+            <li><a href="/admissions#international">International students</a></li>
             <li><a href="/visit#find-us">Find us</a></li>
           </ul>
         </div>
@@ -219,6 +345,77 @@ def hero_slides():
 
 # ---------------------------------------------------------------- pages
 
+HOME_FAQ = [
+    ("Where is Ezekiel Bible Institute located?",
+     "Ezekiel Bible Institute meets at Christian Service Church in East Legon, Accra, in the Greater Accra Region of Ghana. Online students can study from anywhere in the world."),
+    ("Does Ezekiel Bible Institute accept international students?",
+     "Yes. Students from outside Ghana are welcome on every programme, on campus in Accra or online. We issue admission letters for visa applications and can arrange airport pickup from Kotoka International Airport."),
+    ("Is there hostel accommodation?",
+     "Yes. The institute runs a student hostel on site in East Legon, with furnished shared rooms, Wi-Fi, study space and security. Rooms are open to Ghanaian and international students."),
+    ("What programmes are offered?",
+     "Certificates in Biblical Studies and Biblical Counselling, diplomas in Pastoral Ministry and Missions, a three-year Bachelor of Theology and a twelve-week Evening School of Discipleship."),
+]
+
+EVENTS = [
+    ("2026-11-07", "Open day", "Sit in on a class, have lunch with students and meet the faculty.", "10:00", "15:00", "offline"),
+    ("2026-11-21", "Online information evening", "For anyone considering online study, in Ghana or abroad. On Zoom.", "18:00", "19:00", "online"),
+    ("2026-12-05", "Graduation service", "The class of 2026 is commissioned. Families and churches welcome.", "15:00", "17:00", "offline"),
+]
+
+
+def events_ld():
+    out = []
+    for day, name, desc, start, end, mode in EVENTS:
+        ev = {
+            "@context": "https://schema.org",
+            "@type": "Event",
+            "name": f"{name}, {NAME}",
+            "description": desc,
+            "startDate": f"{day}T{start}:00+00:00",
+            "endDate": f"{day}T{end}:00+00:00",
+            "eventStatus": "https://schema.org/EventScheduled",
+            "organizer": {"@id": f"{SITE}/#org"},
+            "isAccessibleForFree": True,
+        }
+        if mode == "online":
+            ev["eventAttendanceMode"] = "https://schema.org/OnlineEventAttendanceMode"
+            ev["location"] = {"@type": "VirtualLocation", "url": f"{SITE}/enquire"}
+        else:
+            ev["eventAttendanceMode"] = "https://schema.org/OfflineEventAttendanceMode"
+            ev["location"] = {"@type": "Place", "name": ADDRESS_LINE, "address": postal_address()}
+        out.append(ev)
+    return out
+
+
+def courses_ld():
+    return {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": f"Programmes at {NAME}",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": i + 1,
+                "item": {
+                    "@type": "Course",
+                    "name": n,
+                    "description": d,
+                    "provider": {"@id": f"{SITE}/#org"},
+                    "inLanguage": "en",
+                    "timeRequired": l,
+                    "offers": {"@type": "Offer", "category": "Paid", "price": fee.strip("$").replace(",", ""), "priceCurrency": "USD"},
+                    "hasCourseInstance": [
+                        {"@type": "CourseInstance", "courseMode": "Onsite" if mm == "campus" else "Online",
+                         **({"location": {"@type": "Place", "name": ADDRESS_LINE, "address": postal_address()}} if mm == "campus" else {})}
+                        for mm in m.split()
+                    ],
+                },
+            }
+            for i, (n, d, l, mode, fee, m) in enumerate(PROGRAMMES)
+        ],
+    }
+
+
 HOME = f"""
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
@@ -229,17 +426,22 @@ HOME = f"""
       </div>
 
       <div class="wrap hero__body">
-        <p class="hero__kicker">Ezekiel Bible Institute <span aria-hidden="true">·</span> Since 2001</p>
+        <p class="hero__kicker">East Legon, Accra <span aria-hidden="true">·</span> Since 2001</p>
         <h1 id="hero-title" class="hero__title">
           <span class="line"><span>Study Scripture</span></span>
           <span class="line"><span>closely.</span></span>
           <span class="line"><span><em>Serve the church well.</em></span></span>
         </h1>
-        <p class="hero__lede">Theological training for pastors, missionaries and church leaders. On campus in Hope City or online from anywhere.</p>
+        <p class="hero__lede">Theological training for pastors, missionaries and church leaders from Ghana and around the world. Live and study on campus in East Legon, Accra, or learn online from anywhere.</p>
         <div class="hero__actions">
           <a class="button button--gold" href="/enquire">Request a prospectus</a>
           <a class="link-arrow link-arrow--light" href="/programmes">Explore programmes</a>
         </div>
+        <ul class="hero__tags">
+          <li><a href="/admissions#international">International students welcome</a></li>
+          <li><a href="/hostel">Hostel on campus</a></li>
+          <li><a href="/programmes">On campus or online</a></li>
+        </ul>
       </div>
 
       <div class="wrap hero__foot">
@@ -272,6 +474,28 @@ HOME = f"""
     </section>
 
     <section class="section section--tint">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>A home for students from everywhere</h2>
+        </div>
+        <div class="tiles">
+          <a class="tile" href="/hostel">
+            <span class="tile__label">Hostel</span>
+            <h3>Live where you learn</h3>
+            <p>Furnished shared rooms on the church grounds in East Legon, with Wi-Fi, a quiet study room and round-the-clock security. Chapel and classrooms are a short walk away.</p>
+            <span class="link-arrow">See the hostel</span>
+          </a>
+          <a class="tile" href="/admissions#international">
+            <span class="tile__label">International</span>
+            <h3>Come from anywhere</h3>
+            <p>Students join us from across Africa and beyond. We send admission letters for visa applications, meet new arrivals at Kotoka International Airport and help you settle in Accra.</p>
+            <span class="link-arrow">For international students</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
       <div class="wrap feature">
         <div class="feature__text">
           <h2>Small classes. Serious reading. Real ministry.</h2>
@@ -285,29 +509,44 @@ HOME = f"""
       </div>
     </section>
 
-    <section class="section">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>Coming up</h2>
-          <a class="link-arrow" href="/visit">All events</a>
+    <section class="section section--tint location" id="location" aria-labelledby="location-title">
+      <div class="wrap location__grid">
+        <div>
+          <h2 id="location-title">Find us in East Legon</h2>
+          <address class="location__address">
+            Christian Service Church<br>
+            East Legon, Accra<br>
+            Greater Accra Region, Ghana
+          </address>
+          <dl class="location__facts">
+            <div><dt>From Kotoka Airport</dt><dd>A short drive</dd></div>
+            <div><dt>Office hours</dt><dd>Mon – Fri, 08:00 – 16:30 GMT</dd></div>
+            <div><dt>Phone</dt><dd><a href="tel:{PHONE_HREF}">{PHONE}</a></dd></div>
+          </dl>
+          <div class="location__actions">
+            <a class="button" href="{MAP_LINK}" rel="noopener">Get directions</a>
+            <a class="link-arrow" href="/visit">Plan a visit</a>
+          </div>
         </div>
-        <ul class="events">
-          <li>
-            <time datetime="2026-11-07"><span>Nov</span> 07</time>
-            <div><h3>Open day</h3><p>Sit in on a class, have lunch with students and meet the faculty.</p></div>
-          </li>
-          <li>
-            <time datetime="2026-11-21"><span>Nov</span> 21</time>
-            <div><h3>Online information evening</h3><p>For anyone considering online study. On Zoom, 18:00.</p></div>
-          </li>
-        </ul>
+        <div class="map">
+          <iframe src="{MAP_EMBED}" title="Map showing Christian Service Church, East Legon, Accra" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap prose-split">
+        <h2>Good to know</h2>
+        <div class="faq">
+{faq_html(HOME_FAQ)}
+        </div>
       </div>
     </section>
 {CTA}
   </main>
 """
 
-PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six programmes, from a twelve-week evening course to a three-year degree. Every one can be started in January or September.") + f"""
+PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six programmes, from a twelve-week evening course to a three-year degree. Every one can be started in January or September, on campus in East Legon, Accra, or online.") + f"""
   <main id="main">
     <section class="section section--flush">
       <div class="wrap">
@@ -317,7 +556,7 @@ PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six programmes, from a 
           <button type="button" aria-pressed="false" data-mode="online">Online</button>
         </div>
 {prog_table(PROGRAMMES)}
-        <p class="note">Campus fees include books and lunch. Online students pay 20% less and buy their own textbooks.</p>
+        <p class="note">Fees are shown in US dollars for international comparison; Ghanaian students can pay in cedis at the current rate. Campus fees include books and lunch. Online students pay 20% less and buy their own textbooks. Hostel rooms are charged separately.</p>
       </div>
     </section>
 
@@ -327,10 +566,10 @@ PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six programmes, from a 
           <h2>Entry requirements</h2>
           <ul class="list">
             <li>A recommendation from your pastor or church leader</li>
-            <li>Secondary school completion for diploma and degree programmes</li>
+            <li>WASSCE or an equivalent secondary qualification for diploma and degree programmes</li>
             <li>English at a level where you can read academic texts comfortably</li>
           </ul>
-          <p class="muted">No previous theological study is needed. If you have studied elsewhere, you may be able to transfer up to a third of a programme.</p>
+          <p class="muted">No previous theological study is needed. International qualifications are accepted; if you have studied elsewhere, you may be able to transfer up to a third of a programme.</p>
         </div>
         <div>
           <h2>Studying online</h2>
@@ -343,14 +582,14 @@ PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six programmes, from a 
   </main>
 """
 
-ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began in 2001 with eleven students in a borrowed church hall. Today we teach around 400 students a year on campus and online.") + """
+ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began in 2001 with eleven students in a borrowed church hall. Today we teach around 400 students a year from Christian Service Church in East Legon, Accra, and online.") + """
   <main id="main">
     <section class="section section--flush">
       <div class="wrap prose-split">
         <h2>What we are for</h2>
         <div class="prose">
-          <p>We exist to train people who will teach the Bible faithfully and care for the church well. Most of our graduates go on to serve in local congregations; others work in mission, chaplaincy, schools and the workplace.</p>
-          <p>We are evangelical and interdenominational. Students come from Anglican, Baptist, Pentecostal, Methodist and independent churches, and all of them affirm our statement of faith.</p>
+          <p>We exist to train people who will teach the Bible faithfully and care for the church well. Most of our graduates go on to serve in local congregations across Ghana and West Africa; others work in mission, chaplaincy, schools and the workplace around the world.</p>
+          <p>We are evangelical and interdenominational. Students come from Anglican, Baptist, Pentecostal, Charismatic, Methodist and independent churches, and from many countries. All of them affirm our statement of faith.</p>
         </div>
       </div>
     </section>
@@ -363,7 +602,7 @@ ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began
           <dl class="pillars">
             <div><dt>Scripture</dt><dd>Every student reads the whole Bible in their first year and takes at least one term of Greek.</dd></div>
             <div><dt>Formation</dt><dd>Groups of eight meet weekly with a tutor to pray and talk honestly.</dd></div>
-            <div><dt>Practice</dt><dd>From the second term you serve each week with a partner church.</dd></div>
+            <div><dt>Practice</dt><dd>From the second term you serve each week with a partner church in Accra.</dd></div>
           </dl>
         </div>
         <figure class="timetable">
@@ -399,7 +638,16 @@ ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began
   </main>
 """
 
-ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are already serving in their church and want to be better equipped for it. You don’t need a theology background.") + """
+ADMISSIONS_FAQ = [
+    ("Can I study online from another country?", "Yes. Lectures are recorded and seminars run at two times each week so most time zones are covered."),
+    ("Do I need to have studied theology before?", "No. The certificate and diploma programmes start from the beginning."),
+    ("Can I transfer credit from another college?", "Usually, for up to a third of a programme. Send your transcript with your application and the Dean will review it."),
+    ("Can I work while I study?", "Many online and part-time students do. Full-time campus study leaves room for around ten hours of work a week."),
+    ("Do international students need a visa to study in Ghana?", "Most do. Once you accept your offer we send an admission letter to support your visa application. Check the requirements for your country with the nearest Ghana embassy or high commission."),
+    ("Is there accommodation for students from outside Accra?", "Yes. Our hostel in East Legon has furnished shared rooms for Ghanaian and international students. Rooms are allocated in order of acceptance."),
+]
+
+ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are already serving in their church and want to be better equipped for it. You don’t need a theology background, and you are welcome from any country.") + f"""
   <main id="main">
     <section class="section section--flush">
       <div class="wrap feature">
@@ -408,7 +656,7 @@ ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are a
           <ol class="steps">
             <li><h3>Enquire</h3><p>We send a prospectus and introduce you to an admissions tutor.</p></li>
             <li><h3>Apply</h3><p>A short form, a one-page testimony and your pastor’s letter.</p></li>
-            <li><h3>Interview</h3><p>Thirty minutes, in person or by video call.</p></li>
+            <li><h3>Interview</h3><p>Thirty minutes, in person in East Legon or by video call.</p></li>
             <li><h3>Accept your offer</h3><p>Bursary decisions come with your offer, so you know the full cost first.</p></li>
           </ol>
           <a class="button" href="/enquire">Start with an enquiry</a>
@@ -422,8 +670,28 @@ ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are a
             <div><dt>Offers sent</dt><dd>By 18 Dec</dd></div>
             <div><dt>Orientation</dt><dd>Mon 11 Jan</dd></div>
           </dl>
-          <p>The September intake opens for applications in March.</p>
+          <p>International applicants: apply by 31 October to leave time for a visa.</p>
         </aside>
+      </div>
+    </section>
+
+    <section class="section section--dark" id="international">
+      <div class="wrap columns">
+        <div>
+          <h2>International students</h2>
+          <p>Students from outside Ghana apply in the same way and are taught alongside Ghanaian classmates. English is the language of teaching.</p>
+          <p class="muted">Prefer not to relocate? Every campus programme except the Diploma in Pastoral Ministry can also be taken online.</p>
+        </div>
+        <div>
+          <ul class="list list--light">
+            <li>Admission letter to support your student visa application</li>
+            <li>Pickup from Kotoka International Airport on arrival</li>
+            <li>A room in our East Legon hostel, ready when you land</li>
+            <li>Help with a local SIM card, mobile money and banking</li>
+            <li>An orientation week covering study, church life and Accra</li>
+            <li>Fees quoted in US dollars, so you know the cost in advance</li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -431,12 +699,13 @@ ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are a
       <div class="wrap columns">
         <div>
           <h2>Fees and bursaries</h2>
-          <p>Fees are listed with each programme and are charged per year. Campus fees include books and lunch; accommodation is separate.</p>
+          <p>Fees are listed with each programme and are charged per year. Campus fees include books and lunch; hostel accommodation is separate.</p>
           <p class="muted">68% of current students receive a bursary. Most awards cover between a quarter and three quarters of fees, and are based on household income and church support.</p>
         </div>
         <div>
           <h2>Accommodation</h2>
-          <p>Shared rooms on campus cost $90 a month with meals. We have six flats for married students, allocated in order of acceptance.</p>
+          <p>Our hostel on the church grounds in East Legon has furnished shared rooms, Wi-Fi and 24-hour security.</p>
+          <a class="link-arrow" href="/hostel">About the hostel</a>
         </div>
       </div>
     </section>
@@ -445,76 +714,141 @@ ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are a
       <div class="wrap prose-split">
         <h2>Questions</h2>
         <div class="faq">
-          <details>
-            <summary>Can I study online from another country?</summary>
-            <p>Yes. Lectures are recorded and seminars run at two times each week.</p>
-          </details>
-          <details>
-            <summary>Do I need to have studied theology before?</summary>
-            <p>No. The certificate and diploma programmes start from the beginning.</p>
-          </details>
-          <details>
-            <summary>Can I transfer credit from another college?</summary>
-            <p>Usually, for up to a third of a programme. Send your transcript with your application and the Dean will review it.</p>
-          </details>
-          <details>
-            <summary>Can I work while I study?</summary>
-            <p>Many online and part-time students do. Full-time campus study leaves room for around ten hours of work a week.</p>
-          </details>
+{faq_html(ADMISSIONS_FAQ)}
         </div>
       </div>
     </section>
   </main>
 """
 
-VISIT = page_head("Visit", "Visit us", "The best way to know whether Ezekiel is right for you is to spend a day here. You are welcome at any of the events below.") + """
+HOSTEL_FAQ = [
+    ("Who can stay in the hostel?", "Any full-time campus student, from Ghana or abroad. Rooms are allocated in order of acceptance, so apply early if you need one."),
+    ("Are men and women housed separately?", "Yes. The hostel has separate wings for men and women, each with its own warden."),
+    ("What should I bring?", "Bedding, towels, a reading lamp and personal items. Beds, mattresses, desks and wardrobes are provided."),
+    ("Can I stay during the holidays?", "International students can stay over the short breaks by arrangement with the hostel office."),
+]
+
+HOSTEL_LD = {
+    "@context": "https://schema.org",
+    "@type": "Hostel",
+    "name": f"{NAME} Student Hostel",
+    "description": "Student accommodation for Ezekiel Bible Institute on the grounds of Christian Service Church, East Legon, Accra. Furnished shared rooms for Ghanaian and international students.",
+    "url": f"{SITE}/hostel",
+    "address": postal_address(),
+    "hasMap": MAP_LINK,
+    "telephone": PHONE,
+    "containedInPlace": {"@id": f"{SITE}/#org"},
+    "amenityFeature": [
+        {"@type": "LocationFeatureSpecification", "name": n, "value": True}
+        for n in ["Furnished rooms", "Wi-Fi", "Study room", "Shared kitchen", "Laundry area", "Running water", "Standby power", "24-hour security"]
+    ],
+}
+
+HOSTEL = page_head("Hostel", "Hostel accommodation", "A safe, quiet place to live on the grounds of Christian Service Church in East Legon, Accra, a short walk from your classes and the chapel.") + f"""
+  <main id="main">
+    <section class="section section--flush">
+      <div class="wrap feature">
+        <div class="feature__text">
+          <h2>Live where you learn</h2>
+          <p>Most full-time campus students live in the hostel. You eat, pray and study alongside classmates from across Ghana and from other countries, and the first lecture of the day is minutes away.</p>
+          <p class="muted">Rooms are shared by two to four students, with separate wings for men and women.</p>
+          <a class="button" href="/enquire">Ask about a room</a>
+        </div>
+        <aside class="intake intake--wide" aria-labelledby="rooms-title">
+          <h2 id="rooms-title">At a glance</h2>
+          <dl>
+            <div><dt>Location</dt><dd>East Legon, Accra</dd></div>
+            <div><dt>Rooms</dt><dd>2 – 4 students</dd></div>
+            <div><dt>Wings</dt><dd>Men and women</dd></div>
+            <div><dt>Open to</dt><dd>Ghanaian and international</dd></div>
+            <div><dt>Wardens</dt><dd>Live on site</dd></div>
+          </dl>
+          <p>Contact admissions for current room rates.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section--tint">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Facilities</h2>
+        </div>
+        <ul class="amenities">
+          <li><h3>Furnished rooms</h3><p>Bed, mattress, desk, chair and wardrobe for every student.</p></li>
+          <li><h3>Wi-Fi</h3><p>Throughout the hostel, so you can reach lectures and the library online.</p></li>
+          <li><h3>Study room</h3><p>A quiet room open late for reading and writing.</p></li>
+          <li><h3>Kitchen</h3><p>A shared kitchen for cooking your own meals.</p></li>
+          <li><h3>Laundry</h3><p>A washing and drying area for each wing.</p></li>
+          <li><h3>Water and power</h3><p>Running water and standby power for outages.</p></li>
+          <li><h3>Security</h3><p>Gated grounds with 24-hour security and resident wardens.</p></li>
+          <li><h3>Chapel nearby</h3><p>Morning prayer and evening chapel a short walk away.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap prose-split">
+        <h2>Hostel questions</h2>
+        <div class="faq">
+{faq_html(HOSTEL_FAQ)}
+        </div>
+      </div>
+    </section>
+{CTA}
+  </main>
+"""
+
+VISIT = page_head("Visit", "Visit us", "The best way to know whether Ezekiel is right for you is to spend a day with us in East Legon. You are welcome at any of the events below.") + f"""
   <main id="main">
     <section class="section section--flush">
       <div class="wrap">
         <ul class="events events--full">
           <li>
             <time datetime="2026-11-07"><span>Nov</span> 07</time>
-            <div><h3>Open day</h3><p>Sit in on a class, have lunch with students and meet the faculty. 10:00 – 15:00, Main Hall.</p></div>
+            <div><h3>Open day</h3><p>Sit in on a class, see the hostel, have lunch with students and meet the faculty. 10:00 – 15:00 GMT, Christian Service Church, East Legon.</p></div>
             <a class="link-arrow" href="/enquire">Book a place</a>
           </li>
           <li>
             <time datetime="2026-11-21"><span>Nov</span> 21</time>
-            <div><h3>Online information evening</h3><p>For anyone considering online study. On Zoom at 18:00, about an hour.</p></div>
+            <div><h3>Online information evening</h3><p>For anyone considering online study, in Ghana or abroad. On Zoom at 18:00 GMT, about an hour.</p></div>
             <a class="link-arrow" href="/enquire">Register</a>
           </li>
           <li>
             <time datetime="2026-12-05"><span>Dec</span> 05</time>
-            <div><h3>Graduation service</h3><p>The class of 2026 is commissioned. Families and churches welcome. 15:00, Chapel.</p></div>
+            <div><h3>Graduation service</h3><p>The class of 2026 is commissioned. Families and churches welcome. 15:00 GMT.</p></div>
           </li>
           <li>
             <time datetime="2027-01-11"><span>Jan</span> 11</time>
-            <div><h3>Orientation week</h3><p>For new students starting in January.</p></div>
+            <div><h3>Orientation week</h3><p>For new students starting in January, including international arrivals.</p></div>
           </li>
         </ul>
       </div>
     </section>
 
-    <section class="section section--tint" id="find-us">
-      <div class="wrap columns">
+    <section class="section section--tint location" id="find-us">
+      <div class="wrap location__grid">
         <div>
           <h2>Find us</h2>
-          <address>12 Covenant Avenue<br>Hope City</address>
-          <p class="muted">Ten minutes’ walk from Central Station. Parking is free on campus.</p>
-        </div>
-        <div>
-          <h2>Office hours</h2>
+          <address class="location__address">Christian Service Church<br>East Legon, Accra<br>Greater Accra Region, Ghana</address>
           <dl class="hours">
             <div><dt>Monday – Friday</dt><dd>08:00 – 16:30</dd></div>
             <div><dt>Saturday</dt><dd>By appointment</dd></div>
-            <div><dt>Sunday</dt><dd>Closed</dd></div>
+            <div><dt>Sunday</dt><dd>Worship with the church</dd></div>
           </dl>
+          <p class="muted">East Legon is a short drive from Kotoka International Airport. Parking is available on the church grounds.</p>
+          <div class="location__actions">
+            <a class="button" href="{MAP_LINK}" rel="noopener">Get directions</a>
+          </div>
+        </div>
+        <div class="map">
+          <iframe src="{MAP_EMBED}" title="Map showing Christian Service Church, East Legon, Accra" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
         </div>
       </div>
     </section>
   </main>
 """
 
-ENQUIRE = page_head("Enquire", "Request a prospectus", "Tell us a little about yourself and an admissions tutor will reply within two working days.") + """
+ENQUIRE = page_head("Enquire", "Request a prospectus", "Tell us a little about yourself and an admissions tutor will reply within two working days, wherever you are in the world.") + f"""
   <main id="main">
     <section class="section section--flush">
       <div class="wrap enquire">
@@ -527,6 +861,16 @@ ENQUIRE = page_head("Enquire", "Request a prospectus", "Tell us a little about y
             <div class="field">
               <label for="f-email">Email</label>
               <input id="f-email" name="email" type="email" autocomplete="email" required>
+            </div>
+          </div>
+          <div class="form__pair">
+            <div class="field">
+              <label for="f-country">Country</label>
+              <input id="f-country" name="country" autocomplete="country-name" value="Ghana" required>
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone or WhatsApp <span>Optional</span></label>
+              <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel">
             </div>
           </div>
           <div class="field">
@@ -547,6 +891,11 @@ ENQUIRE = page_head("Enquire", "Request a prospectus", "Tell us a little about y
             <label><input type="radio" name="mode" value="campus" checked> On campus</label>
             <label><input type="radio" name="mode" value="online"> Online</label>
           </fieldset>
+          <fieldset class="field field--choice">
+            <legend>Hostel room</legend>
+            <label><input type="radio" name="hostel" value="yes"> I need a room</label>
+            <label><input type="radio" name="hostel" value="no" checked> Not needed</label>
+          </fieldset>
           <div class="field">
             <label for="f-message">Message <span>Optional</span></label>
             <textarea id="f-message" name="message" rows="4"></textarea>
@@ -557,8 +906,8 @@ ENQUIRE = page_head("Enquire", "Request a prospectus", "Tell us a little about y
 
         <aside class="contact">
           <h2>Prefer to talk?</h2>
-          <p><a href="tel:+10000000000">+1 (000) 000-0000</a><br><a href="mailto:admissions@example.com">admissions@example.com</a></p>
-          <p class="muted">The admissions office is open 08:00 – 16:30, Monday to Friday.</p>
+          <p><a href="tel:{PHONE_HREF}">{PHONE}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></p>
+          <p class="muted">The admissions office at Christian Service Church, East Legon, is open 08:00 – 16:30 GMT, Monday to Friday.</p>
         </aside>
       </div>
     </section>
@@ -570,15 +919,32 @@ NOT_FOUND = page_head("Not found", "We couldn’t find that page.", "It may have
 """
 
 PAGES = {
-    "index.html": ("Home", "Certificate, diploma and degree programmes in Bible, theology and ministry, on campus or online.", "/", HOME),
-    "programmes.html": ("Programmes", "Six programmes in Bible, theology and ministry, from a twelve-week course to a three-year degree.", "/programmes", PROGRAMMES_PAGE),
-    "about.html": ("About", "Training pastors, missionaries and church leaders since 2001.", "/about", ABOUT),
-    "admissions.html": ("Admissions", "How to apply, key dates, fees and bursaries.", "/admissions", ADMISSIONS),
-    "visit.html": ("Visit", "Open days, events and how to find us.", "/visit", VISIT),
-    "enquire.html": ("Enquire", "Request a prospectus from Ezekiel Bible Institute.", "/enquire", ENQUIRE),
-    "404.html": ("Page not found", "Page not found.", "/404", NOT_FOUND),
+    "index.html": ("Home", "Ezekiel Bible Institute is a Bible school in East Legon, Accra, Ghana. Certificate, diploma and degree programmes in theology and ministry, on campus with hostel accommodation or online. International students welcome.", "/", HOME,
+                   [ORG, WEBSITE, faq_ld(HOME_FAQ), *events_ld()]),
+    "programmes.html": ("Programmes", "Bible and theology programmes in Accra, Ghana: Bachelor of Theology, diplomas in Pastoral Ministry and Missions, and certificates. Study on campus in East Legon or online.", "/programmes", PROGRAMMES_PAGE,
+                        [breadcrumbs("/programmes", "Programmes"), courses_ld()]),
+    "about.html": ("About", "About Ezekiel Bible Institute: an evangelical, interdenominational Bible school training pastors and church leaders at Christian Service Church, East Legon, Accra, since 2001.", "/about", ABOUT,
+                   [breadcrumbs("/about", "About"), ORG]),
+    "admissions.html": ("Admissions", "How to apply to Ezekiel Bible Institute in Accra, Ghana: key dates, fees, bursaries, hostel accommodation and support for international students.", "/admissions", ADMISSIONS,
+                        [breadcrumbs("/admissions", "Admissions"), faq_ld(ADMISSIONS_FAQ)]),
+    "hostel.html": ("Hostel", "Student hostel at Ezekiel Bible Institute, East Legon, Accra: furnished shared rooms, Wi-Fi, study room and 24-hour security for Ghanaian and international students.", "/hostel", HOSTEL,
+                    [breadcrumbs("/hostel", "Hostel"), HOSTEL_LD, faq_ld(HOSTEL_FAQ)]),
+    "visit.html": ("Visit", "Visit Ezekiel Bible Institute at Christian Service Church, East Legon, Accra, Ghana. Open days, events, directions and office hours.", "/visit", VISIT,
+                   [breadcrumbs("/visit", "Visit"), *events_ld()]),
+    "enquire.html": ("Enquire", "Request a prospectus from Ezekiel Bible Institute, East Legon, Accra. Ghanaian and international applicants welcome.", "/enquire", ENQUIRE,
+                     [breadcrumbs("/enquire", "Enquire")]),
+    "404.html": ("Page not found", "Page not found.", "/404", NOT_FOUND, []),
 }
 
-for name, (title, desc, path, body) in PAGES.items():
-    (OUT / name).write_text(head(title, desc, path) + "\n" + header(path) + body + FOOTER)
+for name, (title, desc, path, body, schema) in PAGES.items():
+    (OUT / name).write_text(head(title, desc, path, schema) + "\n" + header(path) + body + FOOTER)
     print("wrote", name)
+
+today = date.today().isoformat()
+urls = [p for _, _, p, _, _ in PAGES.values() if p != "/404"]
+(OUT / "sitemap.xml").write_text(
+    '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    + "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{today}</lastmod></url>\n" for u in urls)
+    + "</urlset>\n"
+)
+print("wrote sitemap.xml")

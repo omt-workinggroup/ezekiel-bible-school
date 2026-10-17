@@ -1,15 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GH">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Enquire · Ezekiel Bible Institute</title>
-  <meta name="description" content="Request a prospectus from Ezekiel Bible Institute.">
+  <title>Enquire | Ezekiel Bible Institute, Accra</title>
+  <meta name="description" content="Request a prospectus from Ezekiel Bible Institute, East Legon, Accra. Ghanaian and international applicants welcome.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <link rel="canonical" href="https://ezekiel-bible-school.vercel.app/enquire">
+  <meta name="geo.region" content="GH-AA">
+  <meta name="geo.placename" content="East Legon, Accra">
   <meta name="theme-color" content="#fbf9f4">
-  <meta property="og:title" content="Enquire · Ezekiel Bible Institute">
-  <meta property="og:description" content="Request a prospectus from Ezekiel Bible Institute.">
+  <meta property="og:title" content="Enquire | Ezekiel Bible Institute, Accra">
+  <meta property="og:description" content="Request a prospectus from Ezekiel Bible Institute, East Legon, Accra. Ghanaian and international applicants welcome.">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_GH">
   <meta property="og:site_name" content="Ezekiel Bible Institute">
   <meta property="og:url" content="https://ezekiel-bible-school.vercel.app/enquire">
   <meta property="og:image" content="https://ezekiel-bible-school.vercel.app/og-image.jpg">
@@ -22,11 +26,13 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Plain-text summary for AI assistants">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=Cinzel:wght@500;600&family=Public+Sans:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="/styles.css">
   <script src="/main.js" defer></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://ezekiel-bible-school.vercel.app/"},{"@type":"ListItem","position":2,"name":"Enquire","item":"https://ezekiel-bible-school.vercel.app/enquire"}]}</script>
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -62,6 +68,7 @@
         <a href="/about">About</a>
         <a href="/programmes">Programmes</a>
         <a href="/admissions">Admissions</a>
+        <a href="/hostel">Hostel</a>
         <a href="/visit">Visit</a>
         <a class="button button--sm" href="/enquire">Enquire</a>
       </nav>
@@ -81,14 +88,15 @@
           <li style="--i: 1"><a href="/about">About</a></li>
           <li style="--i: 2"><a href="/programmes">Programmes</a></li>
           <li style="--i: 3"><a href="/admissions">Admissions</a></li>
-          <li style="--i: 4"><a href="/visit">Visit</a></li>
-          <li style="--i: 5"><a href="/enquire" aria-current="page">Enquire</a></li>
+          <li style="--i: 4"><a href="/hostel">Hostel</a></li>
+          <li style="--i: 5"><a href="/visit">Visit</a></li>
+          <li style="--i: 6"><a href="/enquire" aria-current="page">Enquire</a></li>
         </ul>
       </nav>
       <div class="menu__foot">
         <p class="menu__intake">January 2027 intake<br><span>Applications close 30 November</span></p>
         <p class="menu__contact">
-          <a href="tel:+10000000000">+1 (000) 000-0000</a>
+          <a href="tel:+233000000000">+233 00 000 0000</a>
           <a href="mailto:admissions@example.com">admissions@example.com</a>
         </p>
       </div>
@@ -99,7 +107,7 @@
       <div class="wrap">
         <p class="crumb"><a href="/">Home</a> <span aria-hidden="true">/</span> Enquire</p>
         <h1>Request a prospectus</h1>
-        <p class="page-head__intro">Tell us a little about yourself and an admissions tutor will reply within two working days.</p>
+        <p class="page-head__intro">Tell us a little about yourself and an admissions tutor will reply within two working days, wherever you are in the world.</p>
       </div>
     </header>
 
@@ -115,6 +123,16 @@
             <div class="field">
               <label for="f-email">Email</label>
               <input id="f-email" name="email" type="email" autocomplete="email" required>
+            </div>
+          </div>
+          <div class="form__pair">
+            <div class="field">
+              <label for="f-country">Country</label>
+              <input id="f-country" name="country" autocomplete="country-name" value="Ghana" required>
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone or WhatsApp <span>Optional</span></label>
+              <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel">
             </div>
           </div>
           <div class="field">
@@ -135,6 +153,11 @@
             <label><input type="radio" name="mode" value="campus" checked> On campus</label>
             <label><input type="radio" name="mode" value="online"> Online</label>
           </fieldset>
+          <fieldset class="field field--choice">
+            <legend>Hostel room</legend>
+            <label><input type="radio" name="hostel" value="yes"> I need a room</label>
+            <label><input type="radio" name="hostel" value="no" checked> Not needed</label>
+          </fieldset>
           <div class="field">
             <label for="f-message">Message <span>Optional</span></label>
             <textarea id="f-message" name="message" rows="4"></textarea>
@@ -145,8 +168,8 @@
 
         <aside class="contact">
           <h2>Prefer to talk?</h2>
-          <p><a href="tel:+10000000000">+1 (000) 000-0000</a><br><a href="mailto:admissions@example.com">admissions@example.com</a></p>
-          <p class="muted">The admissions office is open 08:00 – 16:30, Monday to Friday.</p>
+          <p><a href="tel:+233000000000">+233 00 000 0000</a><br><a href="mailto:admissions@example.com">admissions@example.com</a></p>
+          <p class="muted">The admissions office at Christian Service Church, East Legon, is open 08:00 – 16:30 GMT, Monday to Friday.</p>
         </aside>
       </div>
     </section>
@@ -159,8 +182,9 @@
           <svg class="logo__mark" aria-hidden="true"><use href="#mark"/></svg>
           <span class="logo__word">Ezekiel<span>Bible Institute</span></span>
         </a>
-        <p>12 Covenant Avenue<br>Hope City</p>
-        <p><a href="tel:+10000000000">+1 (000) 000-0000</a><br><a href="mailto:office@example.com">office@example.com</a></p>
+        <address>Christian Service Church<br>East Legon, Accra, Ghana</address>
+        <p><a href="tel:+233000000000">+233 00 000 0000</a><br><a href="mailto:admissions@example.com">admissions@example.com</a></p>
+        <p><a href="https://www.google.com/maps/search/?api=1&query=Christian%20Service%20Church%2C%20East%20Legon%2C%20Accra%2C%20Ghana" rel="noopener">Get directions</a></p>
       </div>
       <nav class="footer__nav" aria-label="Footer">
         <div>
@@ -178,6 +202,8 @@
             <li><a href="/about">About</a></li>
             <li><a href="/about#faculty">Faculty</a></li>
             <li><a href="/visit">Events</a></li>
+            <li><a href="/hostel">Hostel</a></li>
+            <li><a href="/admissions#international">International students</a></li>
             <li><a href="/visit#find-us">Find us</a></li>
           </ul>
         </div>
