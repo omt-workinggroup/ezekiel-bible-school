@@ -268,6 +268,7 @@ FOOTER = f"""
         </div>
       </nav>
     </div>
+    <p class="wrap footer__statement" aria-hidden="true">Serve the church <em>well.</em></p>
     <div class="wrap footer__base">
       <p>&copy; <span data-year>2026</span> Ezekiel Bible Institute</p>
       <p class="footer__verse">“I will give you a new heart.” <span>Ezekiel 36:26</span></p>
@@ -277,9 +278,13 @@ FOOTER = f"""
 </html>
 """
 
+RINGS = '<svg class="rings" viewBox="0 0 600 600" aria-hidden="true"><circle cx="300" cy="300" r="298"/><circle cx="300" cy="300" r="236"/><circle cx="300" cy="300" r="174"/></svg>'
+
+
 def page_head(crumb, title, intro):
     return f"""
     <header class="page-head">
+      {RINGS}
       <div class="wrap">
         <p class="crumb"><a href="/">Home</a> <span aria-hidden="true">/</span> {crumb}</p>
         <h1>{title}</h1>
@@ -288,9 +293,10 @@ def page_head(crumb, title, intro):
     </header>
 """
 
-CTA = """
+CTA = f"""
     <section class="cta">
       <svg class="cta__mark" aria-hidden="true"><use href="#mark"/></svg>
+      {RINGS}
       <div class="wrap cta__inner">
         <h2>Applications for January close on 30 November.</h2>
         <div class="cta__actions">
@@ -789,14 +795,14 @@ HOSTEL = page_head("Hostel", "Hostel accommodation", "A safe, quiet place to liv
           <h2>Facilities</h2>
         </div>
         <ul class="amenities">
-          <li><h3>Furnished rooms</h3><p>Bed, mattress, desk, chair and wardrobe for every student.</p></li>
-          <li><h3>Wi-Fi</h3><p>Throughout the hostel, so you can reach lectures and the library online.</p></li>
-          <li><h3>Study room</h3><p>A quiet room open late for reading and writing.</p></li>
-          <li><h3>Kitchen</h3><p>A shared kitchen for cooking your own meals.</p></li>
-          <li><h3>Laundry</h3><p>A washing and drying area for each wing.</p></li>
-          <li><h3>Water and power</h3><p>Running water and standby power for outages.</p></li>
-          <li><h3>Security</h3><p>Gated grounds with 24-hour security and resident wardens.</p></li>
-          <li><h3>Chapel nearby</h3><p>Morning prayer and evening chapel a short walk away.</p></li>
+          <li><svg class="amenities__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19V6M3 15h18v4M21 15v-2.5A2.5 2.5 0 0 0 18.5 10H11v5"/><circle cx="7" cy="12" r="1.8"/></svg><h3>Furnished rooms</h3><p>Bed, mattress, desk, chair and wardrobe for every student.</p></li>
+          <li><svg class="amenities__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M8.6 16a5 5 0 0 1 6.8 0"/><circle cx="12" cy="19" r="1"/></svg><h3>Wi-Fi</h3><p>Throughout the hostel, so you can reach lectures and the library online.</p></li>
+          <li><svg class="amenities__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5a2.5 2.5 0 0 1 2.5 2.5Z"/></svg><h3>Study room</h3><p>A quiet room open late for reading and writing.</p></li>
+          <li><svg class="amenities__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 21V3c-2 0-3.5 2.5-3.5 6v4H17"/></svg><h3>Kitchen</h3><p>A shared kitchen for cooking your own meals.</p></li>
+          <li><svg class="amenities__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="13" r="4.5"/><path d="M7.5 6.5h.01M10.5 6.5h.01"/></svg><h3>Laundry</h3><p>A washing and drying area for each wing.</p></li>
+          <li><svg class="amenities__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s-5.5 6.2-5.5 10a5.5 5.5 0 0 0 11 0C17.5 9.2 12 3 12 3Z"/><path d="m12.8 10-2.3 3.5h3l-2.3 3.5"/></svg><h3>Water and power</h3><p>Running water and standby power for outages.</p></li>
+          <li><svg class="amenities__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.3 7.5 9.5 4.3-1.2 7.5-4.9 7.5-9.5V6Z"/><path d="m9 12 2 2 4-4"/></svg><h3>Security</h3><p>Gated grounds with 24-hour security and resident wardens.</p></li>
+          <li><svg class="amenities__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v5M9.5 4.5h5M6 21v-9l6-5 6 5v9ZM10.5 21v-4a1.5 1.5 0 0 1 3 0v4"/></svg><h3>Chapel nearby</h3><p>Morning prayer and evening chapel a short walk away.</p></li>
         </ul>
       </div>
     </section>

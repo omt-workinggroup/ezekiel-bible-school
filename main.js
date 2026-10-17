@@ -1,4 +1,38 @@
 const root = document.documentElement;
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Header shadow
+const onScroll = () => root.classList.toggle("is-scrolled", scrollY > 8);
+addEventListener("scroll", onScroll, { passive: true });
+onScroll();
+
+// Reveal sections as they scroll in. Only elements that start below the fold
+// are hidden, so nothing visible on load flickers.
+if ("IntersectionObserver" in window && !reduceMotion) {
+  const targets = document.querySelectorAll(
+    ".section-head, .tile, .feature > *, .columns > *, .location__grid > *, .prose-split > *, " +
+      ".people li, .amenities li, .events li, .steps li, .programmes, .timetable, .cta__inner"
+  );
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-in");
+        io.unobserve(entry.target);
+      });
+    },
+    { rootMargin: "0px 0px -10% 0px" }
+  );
+
+  root.classList.add("js");
+  targets.forEach((el) => {
+    if (el.getBoundingClientRect().top < innerHeight) return;
+    const siblings = [...el.parentElement.children].filter((c) => c.matches(el.tagName));
+    el.style.transitionDelay = `${Math.min(siblings.indexOf(el), 4) * 70}ms`;
+    el.classList.add("reveal");
+    io.observe(el);
+  });
+}
 
 // Mobile menu
 const burger = document.querySelector(".burger");
@@ -45,7 +79,7 @@ desktop.addEventListener("change", (e) => {
 // Hero slideshow
 const slides = document.querySelectorAll(".hero__slide");
 
-if (slides.length > 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+if (slides.length > 1 && !reduceMotion) {
   let current = 0;
   setInterval(() => {
     slides[current].classList.remove("is-active");
