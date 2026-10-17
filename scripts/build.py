@@ -438,9 +438,24 @@ HOME = f"""
           <a class="link-arrow link-arrow--light" href="/programmes">Explore programmes</a>
         </div>
         <ul class="hero__tags">
-          <li><a href="/admissions#international">International students welcome</a></li>
-          <li><a href="/hostel">Hostel on campus</a></li>
-          <li><a href="/programmes">On campus or online</a></li>
+          <li>
+            <a href="/admissions#international">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.8 5.5 3.8 9s-1.2 6.5-3.8 9c-2.6-2.5-3.8-5.5-3.8-9S9.4 5.5 12 3Z"/></svg>
+              <span><strong>International</strong> All nations</span>
+            </a>
+          </li>
+          <li>
+            <a href="/hostel">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19V6M3 15h18v4M21 15v-2.5A2.5 2.5 0 0 0 18.5 10H11v5"/><circle cx="7" cy="12" r="1.8"/></svg>
+              <span><strong>Hostel</strong> On campus</span>
+            </a>
+          </li>
+          <li>
+            <a href="/programmes">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="5" width="15" height="10" rx="1"/><path d="M2.5 19h19"/></svg>
+              <span><strong>Online</strong> Or on campus</span>
+            </a>
+          </li>
         </ul>
       </div>
 
