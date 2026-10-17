@@ -1753,3 +1753,8 @@ address { margin-bottom: 1rem; font-size: 1.125rem; }
   color: var(--paper);
 }
 .profile__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 2rem; margin-top: 2.5rem; }
+
+/* WhatsApp button */
+.button--whatsapp { gap: 0.6rem; margin-bottom: 1rem; background: #1f8f4e; border-color: #1f8f4e; }
+.button--whatsapp:hover { background: #187640; border-color: #187640; }
+.button--whatsapp svg { width: 1.2rem; height: 1.2rem; fill: currentColor; }

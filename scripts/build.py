@@ -13,8 +13,9 @@ OUT = pathlib.Path(sys.argv[1])
 
 SITE = "https://ezekiel-bible-school.vercel.app"
 NAME = "Ezekiel Bible Institute"
-PHONE = "+233 00 000 0000"          # TODO: real number
-PHONE_HREF = "+233000000000"
+PHONE = "+233 24 398 0162"
+PHONE_HREF = "+233243980162"
+WHATSAPP = "https://wa.me/233243980162?text=" + quote("Hello, I'd like to know more about Ezekiel Bible Institute.")
 EMAIL = "admissions@example.com"    # TODO: real address
 ADDRESS = {
     "street": "Christian Service Church",
@@ -69,6 +70,13 @@ ORG = {
     "hasMap": MAP_LINK,
     "telephone": PHONE,
     "email": EMAIL,
+    "contactPoint": [{
+        "@type": "ContactPoint",
+        "contactType": "admissions",
+        "telephone": PHONE,
+        "availableLanguage": ["English"],
+        "areaServed": ["GH", "Worldwide"],
+    }],
     "knowsLanguage": "en",
     "areaServed": [{"@type": "Country", "name": "Ghana"}, {"@type": "Place", "name": "West Africa"}, {"@type": "Place", "name": "Worldwide (online)"}],
     "amenityFeature": [
@@ -230,6 +238,7 @@ def header(path):
         <p class="menu__intake">January 2027 intake<br><span>Applications close 30 November</span></p>
         <p class="menu__contact">
           <a href="tel:{PHONE_HREF}">{PHONE}</a>
+          <a href="{WHATSAPP}" rel="noopener">Chat on WhatsApp</a>
           <a href="mailto:{EMAIL}">{EMAIL}</a>
         </p>
       </div>
@@ -246,7 +255,7 @@ FOOTER = f"""
           <span class="logo__word">Ezekiel<span>Bible Institute</span></span>
         </a>
         <address>Christian Service Church<br>East Legon, Accra, Ghana</address>
-        <p><a href="tel:{PHONE_HREF}">{PHONE}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></p>
+        <p><a href="tel:{PHONE_HREF}">{PHONE}</a><br><a href="{WHATSAPP}" rel="noopener">WhatsApp</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></p>
         <p><a href="{MAP_LINK}" rel="noopener">Get directions</a></p>
       </div>
       <nav class="footer__nav" aria-label="Footer">
@@ -624,7 +633,8 @@ HOME = f"""
           <dl class="location__facts">
             <div><dt>From Kotoka Airport</dt><dd>A short drive</dd></div>
             <div><dt>Office hours</dt><dd>Mon – Fri, 08:00 – 16:30 GMT</dd></div>
-            <div><dt>Phone</dt><dd><a href="tel:{PHONE_HREF}">{PHONE}</a></dd></div>
+            <div><dt>Call</dt><dd><a href="tel:{PHONE_HREF}">{PHONE}</a></dd></div>
+            <div><dt>WhatsApp</dt><dd><a href="{WHATSAPP}" rel="noopener">Send a message</a></dd></div>
           </dl>
           <div class="location__actions">
             <a class="button" href="{MAP_LINK}" rel="noopener">Get directions</a>
@@ -1009,6 +1019,7 @@ ENQUIRE = page_head("Enquire", "Request a prospectus", "Tell us a little about y
         <aside class="contact">
           <h2>Prefer to talk?</h2>
           <p><a href="tel:{PHONE_HREF}">{PHONE}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></p>
+          <a class="button button--whatsapp" href="{WHATSAPP}" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 1-2.3.2-.3.5-.3.6-.3h.5c.1 0 .3 0 .5.4l.7 1.6c.1.1.1.3 0 .5l-.3.5-.3.3c-.1.1-.2.3-.1.5.2.3.7 1.1 1.4 1.7 1 .9 1.7 1.1 2 1.2.2.1.4.1.5-.1l.7-.8c.2-.2.3-.2.5-.1l1.5.7c.2.1.3.2.4.3 0 .1 0 .7-.2 1.3Z"/></svg>Chat on WhatsApp</a>
           <p class="muted">The admissions office at Christian Service Church, East Legon, is open 08:00 – 16:30 GMT, Monday to Friday.</p>
         </aside>
       </div>
