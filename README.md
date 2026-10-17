@@ -1,6 +1,6 @@
-# Ezekiel Bible School
+# Ezekiel Bible Institute
 
-Marketing site for Ezekiel Bible School. Static HTML, CSS and a little JavaScript; no build step.
+Marketing site for Ezekiel Bible Institute. Static HTML, CSS and a little JavaScript; no build step.
 
 ## Local development
 

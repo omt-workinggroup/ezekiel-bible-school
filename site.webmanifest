@@ -1,8 +1,11 @@
 {
-  "name": "Ezekiel Bible School",
+  "name": "Ezekiel Bible Institute",
   "short_name": "Ezekiel",
-  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }],
-  "theme_color": "#f6f3ec",
-  "background_color": "#f6f3ec",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ],
+  "theme_color": "#f8f6f1",
+  "background_color": "#f8f6f1",
   "display": "browser"
 }
