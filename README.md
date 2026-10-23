@@ -21,6 +21,7 @@ python3 -m http.server 8000
 | `admissions.html` | How to apply, key dates, fees, FAQ |
 | `hostel.html` | Student hostel and facilities |
 | `visit.html` | Events, location, map, office hours |
+| `gallery.html` | Graduation and ordination photos |
 | `enquire.html` | Prospectus request form |
 | `404.html` | Not found |
 
@@ -35,6 +36,13 @@ footer and page content. Edit it, then rebuild:
 ```sh
 python3 scripts/build.py .
 ```
+
+### Photos
+
+Event photos live in `img/photos/` as WebP and are listed with captions in
+`PHOTOS` in `scripts/build.py`; the gallery, home page mosaic and page headers
+all draw from there. On phones the hero shows `hero-bishop.webp` as a framed
+image rather than a stretched background, so it stays sharp.
 
 ### Hero photos
 

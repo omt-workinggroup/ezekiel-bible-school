@@ -16,15 +16,18 @@ NAME = "Ezekiel Bible Institute"
 PHONE = "+233 24 398 0162"
 PHONE_HREF = "+233243980162"
 WHATSAPP = "https://wa.me/233243980162?text=" + quote("Hello, I'd like to know more about Ezekiel Bible Institute.")
+# Further lines from the institute's ordination flyer.
+OTHER_PHONES = [("024 887 8817", "+233248878817"), ("024 483 8620", "+233244838620"), ("024 371 4862", "+233243714862")]
 EMAIL = "admissions@example.com"    # TODO: real address
 ADDRESS = {
-    "street": "Christian Service Church",
+    "street": "Christian Service Church, Christian Centre, Last Stop",
     "locality": "East Legon",
     "city": "Accra",
     "region": "Greater Accra",
     "country": "GH",
 }
-ADDRESS_LINE = "Christian Service Church, East Legon, Accra, Ghana"
+ADDRESS_LINE = "Christian Service Church, Christian Centre, Last Stop, East Legon, Accra, Ghana"
+ADDRESS_HTML = "Christian Service Church<br>Christian Centre, Last Stop<br>East Legon, Accra, Ghana"
 # TODO: set to (latitude, longitude) of the church gate once confirmed.
 GEO = None
 
@@ -68,7 +71,7 @@ ORG = {
     "foundingDate": "2001",
     "address": postal_address(),
     "hasMap": MAP_LINK,
-    "telephone": PHONE,
+    "telephone": [PHONE] + [href for _, href in OTHER_PHONES],
     "email": EMAIL,
     "contactPoint": [{
         "@type": "ContactPoint",
@@ -183,7 +186,7 @@ def header(path):
     )
     menu_links = "\n".join(
         f'          <li style="--i: {i}"><a href="{href}"{cur(href, path)}>{label}</a></li>'
-        for i, (href, label) in enumerate([("/", "Home")] + NAV + [("/enquire", "Enquire")])
+        for i, (href, label) in enumerate([("/", "Home")] + NAV + [("/gallery", "Gallery"), ("/enquire", "Enquire")])
     )
     return f"""<body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -254,8 +257,8 @@ FOOTER = f"""
           <svg class="logo__mark" aria-hidden="true"><use href="#mark"/></svg>
           <span class="logo__word">Ezekiel<span>Bible Institute</span></span>
         </a>
-        <address>Christian Service Church<br>East Legon, Accra, Ghana</address>
-        <p><a href="tel:{PHONE_HREF}">{PHONE}</a><br><a href="{WHATSAPP}" rel="noopener">WhatsApp</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></p>
+        <address>{ADDRESS_HTML}</address>
+        <p><a href="tel:{PHONE_HREF}">{PHONE}</a><br>{"<br>".join(f'<a href="tel:{h}">{n}</a>' for n, h in OTHER_PHONES)}<br><a href="{WHATSAPP}" rel="noopener">WhatsApp</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></p>
         <p><a href="{MAP_LINK}" rel="noopener">Get directions</a></p>
       </div>
       <nav class="footer__nav" aria-label="Footer">
@@ -275,6 +278,7 @@ FOOTER = f"""
             <li><a href="/about#faculty">Faculty</a></li>
             <li><a href="/visit">Events</a></li>
             <li><a href="/hostel">Hostel</a></li>
+            <li><a href="/gallery">Gallery</a></li>
             <li><a href="/admissions#international">International students</a></li>
             <li><a href="/visit#find-us">Find us</a></li>
           </ul>
@@ -294,9 +298,10 @@ FOOTER = f"""
 RINGS = '<svg class="rings" viewBox="0 0 600 600" aria-hidden="true"><circle cx="300" cy="300" r="298"/><circle cx="300" cy="300" r="236"/><circle cx="300" cy="300" r="174"/></svg>'
 
 
-def page_head(crumb, title, intro):
+def page_head(crumb, title, intro, photo=None):
+    bg = f'\n      <div class="page-head__photo" style="background-image: url(/img/photos/{photo}.webp)" aria-hidden="true"></div>' if photo else ""
     return f"""
-    <header class="page-head">
+    <header class="page-head{' page-head--photo' if photo else ''}">{bg}
       {RINGS}
       <div class="wrap">
         <p class="crumb"><a href="/">Home</a> <span aria-hidden="true">/</span> {crumb}</p>
@@ -371,7 +376,7 @@ def pathway():
 
 # Hero background photos, in order. Files live in img/. Leave empty for the
 # plain navy background.
-HERO_IMAGES = []
+HERO_IMAGES = ["photos/hero-bishop-wide.webp", "photos/procession.webp", "photos/graduates-in-prayer.webp", "photos/worship.webp", "photos/altar-prayer.webp", "photos/graduating-class.webp"]
 
 def hero_slides():
     return "\n".join(
@@ -380,6 +385,50 @@ def hero_slides():
     )
 
 # ---------------------------------------------------------------- pages
+
+# Photos from the graduation and ordination service at Christian Service Church.
+# (file slug, caption). Files live in img/photos/.
+PHOTOS = [
+    ("graduating-class", "The graduating class with the leadership"),
+    ("procession", "The procession into the auditorium"),
+    ("graduates-in-prayer", "Graduates in prayer"),
+    ("worship", "Worship during the service"),
+    ("laying-on-of-hands", "Prayer and laying on of hands"),
+    ("altar-prayer", "Graduates kneeling at the altar"),
+    ("anointing-horn", "Anointing of a graduate"),
+    ("anointing", "Prayer over a graduate"),
+    ("addressing-graduates", "A charge to the graduates"),
+    ("graduates-seated", "Graduates during the service"),
+    ("graduates-seated-2", "Graduates of every age"),
+    ("graduate-detail", "Ready for the ceremony"),
+    ("graduates-in-line", "Graduates awaiting their certificates"),
+    ("graduates-standing", "The class in line"),
+    ("graduates-in-prayer-2", "A moment of prayer"),
+    ("graduate-portrait", "A graduate with the leadership"),
+    ("ministers-before-congregation", "Ministers before the congregation"),
+    ("preaching", "The Word preached"),
+    ("address", "An address to the congregation"),
+    ("address-2", "Teaching from the pulpit"),
+    ("lectern", "At the lectern"),
+    ("leadership-seated", "Leadership at the service"),
+    ("leadership-seated-2", "Leadership at the service"),
+    ("leadership-conversation", "Leadership in conversation"),
+    ("minister-seated", "A minister at the service"),
+    ("ministers-greeting", "Ministers greeting one another"),
+]
+
+
+def figure(slug, caption, cls="", link=None):
+    href = link or f"/img/photos/{slug}.webp"
+    attr = "" if link else " data-lightbox"
+    return f"""<figure class="photo {cls}"><a href="{href}"{attr}><img src="/img/photos/{slug}.webp" alt="{caption}" loading="lazy" decoding="async"></a><figcaption>{caption}</figcaption></figure>"""
+
+
+def mosaic():
+    picks = ["graduating-class", "laying-on-of-hands", "graduates-in-prayer", "worship", "graduates-seated"]
+    caps = dict(PHOTOS)
+    return "\n".join(f"          {figure(slug, caps[slug], f'mosaic__{i + 1}', link="/gallery")}" for i, slug in enumerate(picks))
+
 
 COUNTRIES = ['Ghana', 'Nigeria', 'Liberia', 'Sierra Leone', 'Togo', 'Côte d’Ivoire', 'Cameroon', 'Kenya', 'Uganda', 'South Africa', 'Zambia', 'United Kingdom', 'United States', 'Germany']
 
@@ -518,6 +567,10 @@ HOME = f"""
         <svg class="hero__rings" viewBox="0 0 600 600"><circle cx="300" cy="300" r="298"/><circle cx="300" cy="300" r="236"/><circle cx="300" cy="300" r="174"/></svg>
       </div>
 
+      <figure class="hero__portrait">
+        <img src="/img/photos/hero-bishop.webp" alt="Speaking at the graduation and ordination service, Christian Service Church, East Legon" width="1440" height="1080" fetchpriority="high">
+      </figure>
+
       <div class="wrap hero__body">
         <p class="hero__kicker">East Legon, Accra <span aria-hidden="true">·</span> Since 2001</p>
         <h1 id="hero-title" class="hero__title">
@@ -621,19 +674,29 @@ HOME = f"""
 {voices()}
 {countries_band()}
 
+    <section class="section" aria-labelledby="life-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="life-title">Graduation &amp; ordination</h2>
+          <a class="link-arrow" href="/gallery">See all photos</a>
+        </div>
+        <p class="section-lede">Every year our graduates are prayed for, anointed and sent out from Christian Service Church, East Legon.</p>
+        <div class="mosaic">
+{mosaic()}
+        </div>
+      </div>
+    </section>
+
     <section class="section section--tint location" id="location" aria-labelledby="location-title">
       <div class="wrap location__grid">
         <div>
           <h2 id="location-title">Find us in East Legon</h2>
-          <address class="location__address">
-            Christian Service Church<br>
-            East Legon, Accra<br>
-            Greater Accra Region, Ghana
-          </address>
+          <address class="location__address">{ADDRESS_HTML}</address>
           <dl class="location__facts">
             <div><dt>From Kotoka Airport</dt><dd>A short drive</dd></div>
             <div><dt>Office hours</dt><dd>Mon – Fri, 08:00 – 16:30 GMT</dd></div>
             <div><dt>Call</dt><dd><a href="tel:{PHONE_HREF}">{PHONE}</a></dd></div>
+            <div><dt>Also</dt><dd>{" · ".join(f'<a href="tel:{h}">{n}</a>' for n, h in OTHER_PHONES)}</dd></div>
             <div><dt>WhatsApp</dt><dd><a href="{WHATSAPP}" rel="noopener">Send a message</a></dd></div>
           </dl>
           <div class="location__actions">
@@ -659,7 +722,7 @@ HOME = f"""
   </main>
 """
 
-PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six levels of study, from a one-year Certificate in Christian Foundations to a PhD in Biblical &amp; Theological Studies, taught at Christian Service Church in East Legon, Accra.") + f"""
+PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six levels of study, from a one-year Certificate in Christian Foundations to a PhD in Biblical &amp; Theological Studies, taught at Christian Service Church in East Legon, Accra.", photo="graduates-seated") + f"""
   <main id="main">
     <section class="section section--flush">
       <div class="wrap">
@@ -700,7 +763,7 @@ PROGRAMMES_PAGE = page_head("Programmes", "Programmes", "Six levels of study, fr
   </main>
 """
 
-ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began in 2001 with eleven students in a borrowed church hall. Today we teach around 400 students a year from Christian Service Church in East Legon, Accra, and online.") + f"""
+ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began in 2001 with eleven students in a borrowed church hall. Today we teach around 400 students a year from Christian Service Church in East Legon, Accra, and online.", photo="graduating-class") + f"""
   <main id="main">
     <section class="section section--flush">
       <div class="wrap prose-split">
@@ -710,6 +773,9 @@ ABOUT = page_head("About", "About the institute", "Ezekiel Bible Institute began
           <p>Most of our graduates go on to serve in local congregations across Ghana and West Africa; others work in mission, chaplaincy, schools and the workplace around the world.</p>
           <p>We are evangelical and interdenominational. Students come from Anglican, Baptist, Pentecostal, Charismatic, Methodist and independent churches, and from many countries. All of them affirm our statement of faith.</p>
         </div>
+      </div>
+      <div class="wrap">
+        {figure("graduating-class", "The graduating class with the leadership, Christian Service Church, East Legon", "photo--wide", link="/gallery")}
       </div>
     </section>
 
@@ -764,7 +830,7 @@ ADMISSIONS_FAQ = [
     ("Is there accommodation for students from outside Accra?", "Yes. Our hostel in East Legon has furnished shared rooms for Ghanaian and international students. Rooms are allocated in order of acceptance."),
 ]
 
-ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are already serving in their church and want to be better equipped for it. You don’t need a theology background, and you are welcome from any country.") + f"""
+ADMISSIONS = page_head("Admissions", "Admissions", "We look for people who are already serving in their church and want to be better equipped for it. You don’t need a theology background, and you are welcome from any country.", photo="procession") + f"""
   <main id="main">
     <section class="section section--flush">
       <div class="wrap feature">
@@ -915,7 +981,7 @@ HOSTEL = page_head("Hostel", "Hostel accommodation", "A safe, quiet place to liv
   </main>
 """
 
-VISIT = page_head("Visit", "Visit us", "The best way to know whether Ezekiel is right for you is to spend a day with us in East Legon. You are welcome at any of the events below.") + f"""
+VISIT = page_head("Visit", "Visit us", "The best way to know whether Ezekiel is right for you is to spend a day with us in East Legon. You are welcome at any of the events below.", photo="ministers-before-congregation") + f"""
   <main id="main">
     <section class="section section--flush">
       <div class="wrap">
@@ -946,7 +1012,8 @@ VISIT = page_head("Visit", "Visit us", "The best way to know whether Ezekiel is 
       <div class="wrap location__grid">
         <div>
           <h2>Find us</h2>
-          <address class="location__address">Christian Service Church<br>East Legon, Accra<br>Greater Accra Region, Ghana</address>
+          <address class="location__address">{ADDRESS_HTML}</address>
+          <p class="phones">{" · ".join([f'<a href="tel:{PHONE_HREF}">{PHONE}</a>'] + [f'<a href="tel:{h}">{n}</a>' for n, h in OTHER_PHONES])}</p>
           <dl class="hours">
             <div><dt>Monday – Friday</dt><dd>08:00 – 16:30</dd></div>
             <div><dt>Saturday</dt><dd>By appointment</dd></div>
@@ -1018,9 +1085,9 @@ ENQUIRE = page_head("Enquire", "Request a prospectus", "Tell us a little about y
 
         <aside class="contact">
           <h2>Prefer to talk?</h2>
-          <p><a href="tel:{PHONE_HREF}">{PHONE}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a></p>
+          <p><a href="tel:{PHONE_HREF}">{PHONE}</a><br>{"<br>".join(f'<a href="tel:{h}">{n}</a>' for n, h in OTHER_PHONES)}<br><a href="mailto:{EMAIL}">{EMAIL}</a></p>
           <a class="button button--whatsapp" href="{WHATSAPP}" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 1-2.3.2-.3.5-.3.6-.3h.5c.1 0 .3 0 .5.4l.7 1.6c.1.1.1.3 0 .5l-.3.5-.3.3c-.1.1-.2.3-.1.5.2.3.7 1.1 1.4 1.7 1 .9 1.7 1.1 2 1.2.2.1.4.1.5-.1l.7-.8c.2-.2.3-.2.5-.1l1.5.7c.2.1.3.2.4.3 0 .1 0 .7-.2 1.3Z"/></svg>Chat on WhatsApp</a>
-          <p class="muted">The admissions office at Christian Service Church, East Legon, is open 08:00 – 16:30 GMT, Monday to Friday.</p>
+          <p class="muted">The admissions office at Christian Service Church, Christian Centre, Last Stop, East Legon, is open 08:00 – 16:30 GMT, Monday to Friday.</p>
         </aside>
       </div>
     </section>
@@ -1062,7 +1129,7 @@ def level_article(lv):
         </article>"""
 
 
-CURRICULUM = page_head("Curriculum", "The curriculum", f"“{C.MOTTO[0]}” {C.MOTTO[1]}. Six levels of study, every course listed semester by semester.") + f"""
+CURRICULUM = page_head("Curriculum", "The curriculum", f"“{C.MOTTO[0]}” {C.MOTTO[1]}. Six levels of study, every course listed semester by semester.", photo="altar-prayer") + f"""
   <main id="main">
     <section class="section section--flush" id="formation">
       <div class="wrap feature feature--statement">
@@ -1128,6 +1195,24 @@ CURRICULUM = page_head("Curriculum", "The curriculum", f"“{C.MOTTO[0]}” {C.M
   </main>
 """
 
+GALLERY = page_head("Gallery", "Gallery", "Graduation and ordination at Christian Service Church, Christian Centre, East Legon. Tap any photo to see it larger.", photo="laying-on-of-hands") + f"""
+  <main id="main">
+    <section class="section section--flush">
+      <div class="wrap gallery">
+{chr(10).join(f"        {figure(slug, cap)}" for slug, cap in PHOTOS)}
+      </div>
+    </section>
+{CTA}
+  </main>
+  <dialog class="lightbox" aria-label="Photo">
+    <button class="lightbox__close" type="button" aria-label="Close">×</button>
+    <button class="lightbox__nav lightbox__prev" type="button" aria-label="Previous photo">‹</button>
+    <img alt="">
+    <button class="lightbox__nav lightbox__next" type="button" aria-label="Next photo">›</button>
+    <p class="lightbox__caption"></p>
+  </dialog>
+"""
+
 NOT_FOUND = page_head("Not found", "We couldn’t find that page.", "It may have moved. Try the <a href=\"/\">homepage</a> or <a href=\"/programmes\">programmes</a>.") + """
   <main id="main"></main>
 """
@@ -1147,6 +1232,8 @@ PAGES = {
                     [breadcrumbs("/hostel", "Hostel"), HOSTEL_LD, faq_ld(HOSTEL_FAQ)]),
     "visit.html": ("Visit", "Visit Ezekiel Bible Institute at Christian Service Church, East Legon, Accra, Ghana. Open days, events, directions and office hours.", "/visit", VISIT,
                    [breadcrumbs("/visit", "Visit"), *events_ld()]),
+    "gallery.html": ("Gallery", "Photos from graduation and ordination at Ezekiel Bible Institute, Christian Service Church, East Legon, Accra.", "/gallery", GALLERY,
+                     [breadcrumbs("/gallery", "Gallery")]),
     "enquire.html": ("Enquire", "Request a prospectus from Ezekiel Bible Institute, East Legon, Accra. Ghanaian and international applicants welcome.", "/enquire", ENQUIRE,
                      [breadcrumbs("/enquire", "Enquire")]),
     "404.html": ("Page not found", "Page not found.", "/404", NOT_FOUND, []),

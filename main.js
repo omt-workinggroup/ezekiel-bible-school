@@ -191,6 +191,41 @@ if (levelNav && "IntersectionObserver" in window) {
   document.querySelectorAll(".level").forEach((el) => spy.observe(el));
 }
 
+// Photo lightbox
+const lightbox = document.querySelector(".lightbox");
+
+if (lightbox && typeof lightbox.showModal === "function") {
+  const links = [...document.querySelectorAll("[data-lightbox]")];
+  const img = lightbox.querySelector("img");
+  const caption = lightbox.querySelector(".lightbox__caption");
+  let at = 0;
+
+  const show = (i) => {
+    at = (i + links.length) % links.length;
+    const link = links[at];
+    img.src = link.href;
+    img.alt = link.querySelector("img").alt;
+    caption.textContent = link.closest("figure")?.querySelector("figcaption")?.textContent || "";
+  };
+
+  links.forEach((link, i) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      show(i);
+      lightbox.showModal();
+    });
+  });
+
+  lightbox.querySelector(".lightbox__close").addEventListener("click", () => lightbox.close());
+  lightbox.querySelector(".lightbox__prev").addEventListener("click", () => show(at - 1));
+  lightbox.querySelector(".lightbox__next").addEventListener("click", () => show(at + 1));
+  lightbox.addEventListener("click", (e) => { if (e.target === lightbox) lightbox.close(); });
+  lightbox.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") show(at - 1);
+    if (e.key === "ArrowRight") show(at + 1);
+  });
+}
+
 // Enquiry form
 // TODO: post to Formspree or /api/enquiry once the admissions inbox is set up.
 const form = document.getElementById("enquiry-form");
