@@ -376,7 +376,7 @@ def pathway():
 
 # Hero background photos, in order. Files live in img/. Leave empty for the
 # plain navy background.
-HERO_IMAGES = ["photos/hero-bishop-wide.webp", "photos/procession.webp", "photos/graduates-in-prayer.webp", "photos/worship.webp", "photos/altar-prayer.webp", "photos/graduating-class.webp"]
+HERO_IMAGES = []
 
 def hero_slides():
     return "\n".join(
@@ -568,7 +568,7 @@ HOME = f"""
       </div>
 
       <figure class="hero__portrait" aria-hidden="true">
-        <img src="/img/photos/hero-bishop-portrait.webp" alt="" width="1080" height="1440" fetchpriority="high">
+        <img src="/img/photos/hero-couple.webp" alt="" width="1600" height="1890" fetchpriority="high">
       </figure>
 
       <div class="wrap hero__body">
