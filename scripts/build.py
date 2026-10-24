@@ -560,27 +560,24 @@ def courses_ld():
 
 HOME = f"""
   <main id="main">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero__media" aria-hidden="true">
-{hero_slides()}
-        <svg class="hero__mark"><use href="#mark"/></svg>
-        <svg class="hero__rings" viewBox="0 0 600 600"><circle cx="300" cy="300" r="298"/><circle cx="300" cy="300" r="236"/><circle cx="300" cy="300" r="174"/></svg>
-      </div>
-
+    <section class="hero hero--photo" aria-labelledby="hero-title">
       <figure class="hero__portrait" aria-hidden="true">
         <img src="/img/photos/hero-couple.webp" alt="" width="1600" height="1890" fetchpriority="high">
       </figure>
 
       <div class="wrap hero__body">
-        <p class="hero__kicker">East Legon, Accra <span aria-hidden="true">·</span> Since 2001</p>
+        <p class="hero__eyebrow"><span>Admissions now open</span></p>
         <h1 id="hero-title" class="hero__title">
-          <span class="line"><span>Study Scripture</span></span>
-          <span class="line"><span>closely.</span></span>
-          <span class="line"><span><em>Serve the church well.</em></span></span>
+          <span class="line"><span>Ezekiel Bible</span></span>
+          <span class="line"><span class="hero__gold">Institute</span></span>
         </h1>
-        <p class="hero__lede">Theological training for pastors, missionaries and church leaders from Ghana and around the world. Live and study on campus in East Legon, Accra, or learn online from anywhere.</p>
+        <p class="hero__sub">Study Scripture closely · Serve the church well</p>
+        <p class="hero__lede">Theological training from Certificate to PhD at Christian Service Church, East Legon, Accra. Hostel on campus, and students from Ghana and around the world are welcome.</p>
         <div class="hero__actions">
-          <a class="button button--gold" href="/enquire">Request a prospectus</a>
+          <a class="hero__cta" href="/enquire">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5a2.5 2.5 0 0 1 2.5 2.5Z"/></svg>
+            Apply now
+          </a>
           <a class="link-arrow link-arrow--light" href="/programmes">Explore programmes</a>
         </div>
         <ul class="hero__tags">
@@ -603,15 +600,6 @@ HOME = f"""
             </a>
           </li>
         </ul>
-      </div>
-
-      <div class="wrap hero__foot">
-        <dl class="hero__dates">
-          <div><dt>Open day</dt><dd>Sat 7 Nov</dd></div>
-          <div><dt>Applications close</dt><dd>Mon 30 Nov</dd></div>
-          <div><dt>Term begins</dt><dd>Mon 11 Jan</dd></div>
-        </dl>
-        <a class="hero__scroll" href="#after-hero"><span>Scroll</span></a>
       </div>
     </section>
 
